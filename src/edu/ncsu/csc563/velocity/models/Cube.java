@@ -11,16 +11,34 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.SystemClock;
 
+/**
+ * Sample class that provides rendering logic for a 3D cube with position
+ * and normal data (for per-pixel diffuse and specular lighting)
+ */
 public class Cube {	
 	
-	private int[] bufferHandles;
+	/** Array of handles that identify the buffers associated with this object */
+	private int[] bufferHandles;	
+	/** FloatBuffer containing the formatted vertex data (position and normals) */
 	private FloatBuffer vertices;
+	/** ShortBuffer containing the formatted element data */
 	private ShortBuffer elements;
-	
+	/** Shader that is used to render this object with the data it provides */
 	private GLES20Shader shader;
 	
+	/**
+	 * Construct a renderable cube object with hardcoded vertex data
+	 * @param shader used to draw this object
+	 */
 	public Cube(GLES20Shader shader) {
 		
+		//Hard-coded position and normal data for a standard cube
+		//Each row lists the x, y, and z position data and x, y, and z
+		//normal data for a unique vertex on the cube; because a cube has flat
+		//intersecting faces, there are 24 unique vertices (4 per face) even though
+		//there are only 8 corners, because the vertex at each corner must be duplicated 
+		//twice to account for 3 different normals (1 for each face that touches that
+		//corner)
 		float rawVertices[] = {
 		//       -----Position-----   ------Normal------
 		//         X      Y      Z      X      Y      Z
@@ -49,7 +67,14 @@ public class Cube {
 				 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, //22
 				 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, //23
 			};
-			
+		
+		//Hard-coded element data for a standard cube
+		//An element array specifies the order in which the vertices (listed above)
+		//will be drawn, to save duplicating vertices in the vertex buffer
+		//For example, a square face is drawn as two triangles, but both triangles share
+		//two vertices; the element array says to draw the vertices in a set order (say
+		//0, 1, 2 -- 2, 3, 0) which saves duplicating 6 floats for vertices 0 and 2 in
+		//this example
 		short rawElements[] = {
 				0,	1,	2,
 				2,	3,	0,
@@ -68,8 +93,8 @@ public class Cube {
 		this.shader = shader;
 		
 		//Generate handles for buffers to store data on the graphics card
-		//	+ bufferHandles[0] is the handle to the vertex buffer
-		//	+ bufferHandles[1] is the handle to the element buffer
+		//bufferHandles[0] is the handle to the vertex buffer
+		//bufferHandles[1] is the handle to the element buffer
 		this.bufferHandles = new int[2];
 		GLES20.glGenBuffers(2, this.bufferHandles, 0);
 		
@@ -96,31 +121,52 @@ public class Cube {
 		GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, 2 * this.elements.capacity(), this.elements, GLES20.GL_STATIC_DRAW);
 	}
 	
+	/**
+	 * Issue the OpenGL API calls required to draw the cube object to the application window
+	 */
 	public void draw() {
+		//Set the handle of the shader to use on the graphics card
 		this.shader.use();
 		
+		//Calculate the model matrix for this particular cube in this moment of time
+		//It spins CCW around its Y axis as a function of time
 		float model[] = new float[16];
-		Matrix.setIdentityM(model, 0);
-		
+		Matrix.setIdentityM(model, 0);		
 		long time = SystemClock.uptimeMillis() % 4000L;
 		float angle = 0.090f * ((int)time);
 		Matrix.setRotateM(model, 0, angle, 0, 1, 0);
 		
+		//Set the value of the "model" shader uniform variable on the graphics card
 		this.shader.setUniform("model", model);
 		
+		//Set the value of the "diffuseColor" shader uniform variable on the graphics card
 		float diffuseColor[] = {0.5f, 1.0f, 0.0f};
 		this.shader.setUniform("diffuseColor", diffuseColor);
 		
+		//Bind the array buffer using the handle we generated for the vertex buffer earlier,
+		//to tell the graphics card which buffer we're talking about when we issue the next few
+		//commands
 		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, this.bufferHandles[0]);
 		
+		//Tell the graphics card how position data is stored in our vertex buffer, so the shader knows
+		//where to get the data for the "position" attribute value in the shader
 		GLES20.glEnableVertexAttribArray(GLES20Shader.ATTRIB_POSITION);
         GLES20.glVertexAttribPointer(GLES20Shader.ATTRIB_POSITION, 3, GLES20.GL_FLOAT, false, 6 * 4, 0);
         
+        //Tell the graphics card how normal data is stored in our vertex buffer, so the shader knows
+      	//where to get the data for the "normal" attribute value in the shader
         GLES20.glEnableVertexAttribArray(GLES20Shader.ATTRIB_NORMAL);
         GLES20.glVertexAttribPointer(GLES20Shader.ATTRIB_NORMAL, 3, GLES20.GL_FLOAT, false, 6 * 4, 12);
         
+        //Bind the element buffer using the handle we generated for the element buffer earlier,
+      	//to tell the graphics card which buffer we're talking about when we issue the next few
+      	//commands
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, this.bufferHandles[1]);
         
+        //Issue a command to the graphics card, telling it to draw triangles using the provided data, of which
+        //there are 36 total vertices (3 per triangle, 2 triangles per face, 6 faces for the cube), with the element
+        //data provided as unsigned shorts (2 bytes per element value), and starting at offset 0 into the bound element
+        //array buffer
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, 36, GLES20.GL_UNSIGNED_SHORT, 0);
 	}
 }

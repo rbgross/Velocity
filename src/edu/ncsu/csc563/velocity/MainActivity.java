@@ -6,6 +6,9 @@ import android.opengl.GLSurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 
+/**
+ * Activity class from which the Android app is launched
+ */
 public class MainActivity extends Activity {
 
 	private GLSurfaceView mView;

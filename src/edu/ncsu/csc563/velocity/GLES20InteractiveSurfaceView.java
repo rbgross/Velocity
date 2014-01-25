@@ -6,6 +6,10 @@ import android.hardware.SensorEvent;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
+/**
+ * SurfaceView that manages an OpenGL ES 2.0 Renderer and can handle
+ * touch and accelerometer events
+ */
 public class GLES20InteractiveSurfaceView extends GLSurfaceView {
 
     public GLES20InteractiveSurfaceView(Context context) {
@@ -20,14 +24,8 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-    	
-    	switch(e.getAction()) {
-    	
-    	}
-    	e.getX();
-    	e.getY();
-    	return true;
     	//TODO Add touch input
+    	return true;
     }
     
     public void onSensorChanged(SensorEvent e) {
