@@ -21,7 +21,7 @@ public class GLES20ShaderFactory {
 	//model (usually centered around 0, 0, 0 for ease of manipulation, but this isn't a requirement)
 	//by the Model matrix transforms the object from Model space to World space; multiplying that
 	//by the View matrix transforms the object from World space to Eye space (or camera space, or view space);
-	//multipling that by the Projection matrix transforms the object from Eye space to Clip space; a last, further
+	//multiplying that by the Projection matrix transforms the object from Eye space to Clip space; a last, further
 	//transformation is automatically made that transforms these values into Normalized Device Coordinates, which can
 	//vary by device but typically the center is point (0,0), far left  is (-1,0), and so on
 	
@@ -52,9 +52,9 @@ public class GLES20ShaderFactory {
 				"void main() {" +
 				//Transform the normal and position values to eye space for lighting calculations
 				"	eyeNormal = mat3( view * model ) * normal;" +
-				"	eyePosition = vec3( view * model * vec4( position, 1.0f ) );" +
+				"	eyePosition = vec3( view * model * vec4( position, 1.0 ) );" +
 				//Transform the position into clip coordinates as the primary output for this shader
-				"	gl_Position = proj * view * model * vec4( position, 1.0f );" +
+				"	gl_Position = proj * view * model * vec4( position, 1.0 );" +
 				"}";
 		
 		String fragmentShaderCode =
@@ -79,20 +79,20 @@ public class GLES20ShaderFactory {
 				//also be provided as uniforms; for this shader, we assume the light is pure, full white
 				//and the object reflects pure white light in the perfect reflection direction (which is a typical
 				//case)
-				"	vec3 lightIntensity = vec3( 1.0f, 1.0f, 1.0f );" +
-				"	vec3 specularColor = vec3( 1.0f, 1.0f, 1.0f );" +
-				"	float specExp = 40.0f;" +
+				"	vec3 lightIntensity = vec3( 1.0, 1.0, 1.0 );" +
+				"	vec3 specularColor = vec3( 1.0, 1.0, 1.0 );" +
+				"	float specExp = 40.0;" +
 				//Calculate an approximation of the reflection direction
 				"	vec3 halfAngle = normalize( toLightDir + toViewerDir );" +
 				//Again, here this is a hardcoded value for the ambient light in the scene; it is assume to be pure white
 				//at 20% intensity, and objects reflect their diffuse color at that intensity
-				"	vec3 ambientColor = 0.2f * diffuseColor;" +
+				"	vec3 ambientColor = 0.2 * diffuseColor;" +
 				//These determine the contribution of each lighting term to the overall color of the pixel
 				"	vec3 ambient = ambientColor;" +
-				"	vec3 diffuse = diffuseColor * max ( dot( normal, toLightDir ), 0.0f );" +
-				"	vec3 specular = specularColor * pow( max( dot( normal, halfAngle ), 0.0f ), specExp );" +
+				"	vec3 diffuse = diffuseColor * max ( dot( normal, toLightDir ), 0.0 );" +
+				"	vec3 specular = specularColor * pow( max( dot( normal, halfAngle ), 0.0 ), specExp );" +
 				//The primary output of this fragment shader is the color of this pixel, represented in a vec4
-				"	gl_FragColor = vec4( lightIntensity * ( ambient + diffuse + specular ), 1.0f );" +
+				"	gl_FragColor = vec4( lightIntensity * ( ambient + diffuse + specular ), 1.0 );" +
 				"}";
 		
 		//Create the shader

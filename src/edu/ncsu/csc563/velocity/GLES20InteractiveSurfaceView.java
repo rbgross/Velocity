@@ -19,13 +19,13 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView {
         setEGLContextClientVersion(2);
 
         // Set the Renderer for drawing on the GLSurfaceView
-        setRenderer(new GLES20Renderer());
+        setRenderer(new GLES20Renderer(context));
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
     	//TODO Add touch input
-    	return true;
+    	return false;
     }
     
     public void onSensorChanged(SensorEvent e) {
