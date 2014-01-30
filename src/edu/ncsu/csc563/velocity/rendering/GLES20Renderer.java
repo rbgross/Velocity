@@ -5,8 +5,8 @@ import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import edu.ncsu.csc563.velocity.ResourceManager;
 import edu.ncsu.csc563.velocity.models.Dragon;
+import edu.ncsu.csc563.velocity.utility.ResourceManager;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -18,8 +18,8 @@ import android.util.Log;
  * Renderer for OpenGL ES 2.0
  */
 public class GLES20Renderer implements GLSurfaceView.Renderer {
-	
-	private Context mContext;
+	/** Reference to this activity's context */
+	private Context context;
 	
 	/** Refernce to the current shader state on the graphics card */
 	private GLES20Shader mActiveShader;
@@ -28,7 +28,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	private Dragon dragon;
 	
 	public GLES20Renderer(Context context) {
-		this.mContext = context;
+		this.context = context;
 	}
 	
 	@Override
@@ -46,13 +46,13 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		
 		String modelName = "DragonSmall.vmf";
 		try {
-			ResourceManager.loadMesh(modelName, this.mContext.getAssets().open(modelName));
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
 		} catch (IOException e) {
-			Log.e("GLES20Renderer", "The file " + modelName + " could not be found.");
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
 		}
 		
 		//Create a cube to be rendered
-		this.dragon = new Dragon(this.mActiveShader, modelName);
+		this.dragon = new Dragon(this.mActiveShader, "DragonSmall.vmf");
 		
 		//Calculate the value for a view matrix and store that value for this
 		//shader on the graphics card
@@ -66,12 +66,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	}
 	
 	@Override
-	public void onSurfaceChanged(GL10 unused, int width, int height) {
-		//Adjust the viewport based on geometry changes, such as screen rotation
-		//This may be unintentional/unneeded bullshit, but I can't figure out how to rotate
-		//the screen in the emulator, so this may get changed or taken out in the future
-        GLES20.glViewport(0, 0, width, height);
-        
+	public void onSurfaceChanged(GL10 unused, int width, int height) {        
         //Calculate the value for a projection matrix and store the value for it on 
         //the graphics card
         float proj[] = new float[16];

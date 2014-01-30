@@ -1,8 +1,8 @@
 package edu.ncsu.csc563.velocity.models;
 
-import edu.ncsu.csc563.velocity.ResourceManager;
 import edu.ncsu.csc563.velocity.components.Mesh;
 import edu.ncsu.csc563.velocity.rendering.GLES20Shader;
+import edu.ncsu.csc563.velocity.utility.ResourceManager;
 
 import android.opengl.Matrix;
 import android.os.SystemClock;
@@ -13,7 +13,7 @@ public class Dragon {
 	
 	public Dragon(GLES20Shader shader, String modelName) {
 		this.mShader = shader;
-		this.mMesh = ResourceManager.mMeshes.get(modelName);
+		this.mMesh = ResourceManager.getMesh(modelName);
 	}
 	
 	public void draw() {

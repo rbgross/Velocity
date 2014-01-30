@@ -130,9 +130,8 @@ public class GLES20Shader {
 	 */
 	private void printShaderInfoLog(int shader) {
 		String infoLog = GLES20.glGetShaderInfoLog(shader);
-		//If any errors occured, print them to the log
+		//If any errors occurred, print them to the log
 		if (infoLog != null) {
-			System.err.println(infoLog);
 			Log.e("Shader", infoLog);
 		}
 	}
@@ -143,9 +142,8 @@ public class GLES20Shader {
 	 */
 	private void printProgramInfoLog(int program) {
 		String infoLog = GLES20.glGetProgramInfoLog(program);
-		//If any errors occured, print them to the log
+		//If any errors occurred, print them to the log
 		if (infoLog != null) {
-			System.err.println(infoLog);
 			Log.e("Program", infoLog);
 		}
 	}

@@ -4,7 +4,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 
 import edu.ncsu.csc563.velocity.rendering.GLES20Shader;
 
@@ -15,7 +14,7 @@ public class Mesh {
 	private int[] mBufferHandles;	
 	/** FloatBuffer containing the formatted vertex data (position and normals) */
 	private FloatBuffer mVertices;
-	/** ShortBuffer containing the formatted element data */
+	/** IntBuffer containing the formatted element data */
 	private IntBuffer mElements;
 	
 	public Mesh(float[] rawVertices, int[] rawElements) {
@@ -36,7 +35,7 @@ public class Mesh {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, this.mBufferHandles[0]);
 		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, 4 * this.mVertices.capacity(), this.mVertices, GLES20.GL_STATIC_DRAW);
         
-		//Order the data in the mElements array and store it in a short buffer
+		//Order the data in the mElements array and store it in a int buffer
         ByteBuffer elementBB = ByteBuffer.allocateDirect(rawElements.length * 4);
         elementBB.order(ByteOrder.nativeOrder());
         this.mElements = elementBB.asIntBuffer();
@@ -70,9 +69,8 @@ public class Mesh {
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, this.mBufferHandles[1]);
         
         //Issue a command to the graphics card, telling it to draw triangles using the provided data, of which
-        //there are 36 total vertices (3 per triangle, 2 triangles per face, 6 faces for the cube), with the element
-        //data provided as unsigned shorts (2 bytes per element value), and starting at offset 0 into the bound element
-        //array buffer
+        //there are mElements.capacity() total vertices, with the element data provided as unsigned ints (4 bytes
+        //per element value), and starting at offset 0 into the bound element array buffer
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, this.mElements.capacity(), GLES20.GL_UNSIGNED_INT, 0);
 	}
 
