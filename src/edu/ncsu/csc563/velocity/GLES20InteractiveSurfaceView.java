@@ -32,4 +32,3 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView {
     	//TODO Add accelerometer input
     }
 }
-

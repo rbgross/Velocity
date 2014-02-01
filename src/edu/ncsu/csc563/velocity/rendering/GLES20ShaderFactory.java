@@ -31,7 +31,7 @@ public class GLES20ShaderFactory {
 	 * lighting in color provided in diffuseColor
 	 * @return shader with diffuse/specular lighting
 	 */
-	public static GLES20Shader basic() {
+	public static GLES20Shader diffuseSpecular() {
 		String vertexShaderCode =
 				"precision mediump float;" +
 				//Take in provided position and normal data

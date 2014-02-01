@@ -14,10 +14,12 @@ public class ResourceManager {
 	private static HashMap<String, Mesh> mMeshes = new HashMap<String, Mesh>();
 	
 	public static void loadMesh(String fileName, InputStream fileStream) throws IOException {
+		/*
 		if (ResourceManager.mMeshes.containsKey(fileName)) {
 			Log.e("ResourceManager", "Mesh " + fileName + " has already been loaded.");
 			return;
 		}
+		*/
 		
 		DataInputStream is = new DataInputStream(fileStream);
 		
