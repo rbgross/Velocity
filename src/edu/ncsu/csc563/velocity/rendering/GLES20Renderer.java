@@ -21,7 +21,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	/** Reference to this activity's context */
 	private Context context;
 	
-	/** Refernce to the current shader state on the graphics card */
+	/** Reference to the current shader state on the graphics card */
 	private GLES20Shader mActiveShader;
 	
 	/** Object to be rendered by this class */
@@ -34,7 +34,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		//Create a basic shader and activate it
-		this.mActiveShader = GLES20ShaderFactory.basic();
+		this.mActiveShader = GLES20ShaderFactory.diffuseSpecular();
 		this.mActiveShader.use();
 		
 		//Enable GL states to perform a depth test and cull back facing polygons

@@ -9,7 +9,7 @@ import edu.ncsu.csc563.velocity.rendering.GLES20Shader;
 
 import android.opengl.GLES20;
 
-public class Mesh {
+public class Mesh extends Component {
 	/** Array of handles that identify the buffers associated with this object */
 	private int[] mBufferHandles;	
 	/** FloatBuffer containing the formatted vertex data (position and normals) */
