@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import android.util.Log;
 
-import edu.ncsu.csc563.velocity.components.Mesh;
+import edu.ncsu.csc563.velocity.actors.components.Mesh;
 
 public class ResourceManager {
 	/** HashMap of meshes loaded from file */

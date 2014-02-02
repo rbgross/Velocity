@@ -1,4 +1,4 @@
-package edu.ncsu.csc563.velocity.components;
+package edu.ncsu.csc563.velocity.actors.components;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -73,5 +73,4 @@ public class Mesh extends Component {
         //per element value), and starting at offset 0 into the bound element array buffer
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, this.mElements.capacity(), GLES20.GL_UNSIGNED_INT, 0);
 	}
-
 }

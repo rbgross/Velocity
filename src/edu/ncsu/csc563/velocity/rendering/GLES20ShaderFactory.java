@@ -1,5 +1,7 @@
 package edu.ncsu.csc563.velocity.rendering;
 
+import java.util.HashMap;
+
 import android.opengl.GLES20;
 
 /**
@@ -7,6 +9,9 @@ import android.opengl.GLES20;
  * based on the provided shader code for use by other parts of the application
  */
 public class GLES20ShaderFactory {
+	/** HashMap of meshes loaded from file */
+	private static HashMap<String, GLES20Shader> mShaders = new HashMap<String, GLES20Shader>();
+	
 	//The vertex shader takes in attributes and uniform values and returns
 	//a vec4 that represents the position of the vertex processed in this shader
 	//in x, y, z, w coordinates, called homogeneous coordinates
@@ -31,7 +36,7 @@ public class GLES20ShaderFactory {
 	 * lighting in color provided in diffuseColor
 	 * @return shader with diffuse/specular lighting
 	 */
-	public static GLES20Shader diffuseSpecular() {
+	public static void diffuseSpecular() {		
 		String vertexShaderCode =
 				"precision mediump float;" +
 				//Take in provided position and normal data
@@ -118,6 +123,10 @@ public class GLES20ShaderFactory {
 		shader.addUniform("diffuseColor");
 		
 		//Return the created shader object
-		return shader;
+		GLES20ShaderFactory.mShaders.put("diffuseSpecular", shader);	
+	}
+	
+	public static GLES20Shader getShader(String shaderName) {		
+		return GLES20ShaderFactory.mShaders.get(shaderName);
 	}
 }

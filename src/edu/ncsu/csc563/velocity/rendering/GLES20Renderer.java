@@ -5,14 +5,15 @@ import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import edu.ncsu.csc563.velocity.models.Dragon;
-import edu.ncsu.csc563.velocity.utility.ResourceManager;
-
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
+
+import edu.ncsu.csc563.velocity.actors.Actor;
+import edu.ncsu.csc563.velocity.actors.ActorFactory;
+import edu.ncsu.csc563.velocity.utility.ResourceManager;
 
 /**
  * Renderer for OpenGL ES 2.0
@@ -21,11 +22,11 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	/** Reference to this activity's context */
 	private Context context;
 	
-	/** Reference to the current shader state on the graphics card */
+	/** Reference to the currently active shader */
 	private GLES20Shader mActiveShader;
 	
 	/** Object to be rendered by this class */
-	private Dragon dragon;
+	private Actor cube;
 	
 	public GLES20Renderer(Context context) {
 		this.context = context;
@@ -33,8 +34,17 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		String modelName = "meshes/Cube.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		GLES20ShaderFactory.diffuseSpecular();
+		
 		//Create a basic shader and activate it
-		this.mActiveShader = GLES20ShaderFactory.diffuseSpecular();
+		this.mActiveShader = GLES20ShaderFactory.getShader("diffuseSpecular");
 		this.mActiveShader.use();
 		
 		//Enable GL states to perform a depth test and cull back facing polygons
@@ -44,15 +54,8 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		//Set the default color of the background each time a new frame is drawn
 		GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		
-		String modelName = "DragonSmall.vmf";
-		try {
-			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
-		} catch (IOException e) {
-			Log.e("MainActivity", "The file " + modelName + " could not be found.");
-		}
-		
 		//Create a cube to be rendered
-		this.dragon = new Dragon(this.mActiveShader, "DragonSmall.vmf");
+		this.cube = ActorFactory.createCube();
 		
 		//Calculate the value for a view matrix and store that value for this
 		//shader on the graphics card
@@ -83,7 +86,10 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		//value explicitly in most situations)
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 		
+		//Update the cube
+		this.cube.update();
+		
 		//Draw the cube
-		this.dragon.draw();
+		this.cube.draw();
 	}
 }
