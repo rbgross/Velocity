@@ -41,10 +41,15 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 			Log.e("MainActivity", "The file " + modelName + " could not be found.");
 		}
 		
-		GLES20ShaderFactory.diffuseSpecular();
+		String shaderName = "shaders/diffuseSpecular";
+		try {
+			GLES20ShaderFactory.loadShader(shaderName, this.context.getAssets().open(shaderName + ".vert"), this.context.getAssets().open(shaderName + ".frag"));
+		} catch (IOException e){
+			Log.e("MainActivity", "The file " + shaderName + " could not be found.");
+		}
 		
 		//Create a basic shader and activate it
-		this.mActiveShader = GLES20ShaderFactory.getShader("diffuseSpecular");
+		this.mActiveShader = GLES20ShaderFactory.getShader("shaders/diffuseSpecular");
 		this.mActiveShader.use();
 		
 		//Enable GL states to perform a depth test and cull back facing polygons
@@ -55,7 +60,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		
 		//Create a cube to be rendered
-		this.cube = ActorFactory.createCube();
+		this.cube = ActorFactory.cube();
 		
 		//Calculate the value for a view matrix and store that value for this
 		//shader on the graphics card
@@ -64,7 +69,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		this.mActiveShader.setUniform("view", view);
 		
 		//Store the value for the light position on the graphics card
-		float lightPos[] = {1.0f, 1.0f, -1.0f, 0.0f};
+		float lightPos[] = {1.0f, 1.0f, 0.0f, 0.0f};
 		this.mActiveShader.setUniform("lightPosition", lightPos);
 	}
 	
