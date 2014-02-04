@@ -1,9 +1,5 @@
 package edu.ncsu.csc563.velocity.rendering;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import android.opengl.GLES20;
@@ -39,24 +35,70 @@ public class GLES20ShaderFactory {
 	 * a light position, and a set color to render the object with diffuse and specular
 	 * lighting in color provided in diffuseColor
 	 * @return shader with diffuse/specular lighting
-	 * @throws IOException 
 	 */
-	public static void loadShader(String shaderName, InputStream vertexStream, InputStream fragmentStream) throws IOException {		
-		String temp;
+	public static void diffuseSpecular() {		
+		String vertexShaderCode =
+				"precision mediump float;" +
+				//Take in provided position and normal data
+				"attribute vec3 normal;" +
+				"attribute vec3 position;" +
+				//Going to output the position and normal for
+				//each vertex in eye-space (the space defined by the camera
+				//properties as represented by the view matrix, also called
+				//view space or camera space)
+				"varying vec3 eyeNormal;" +
+				"varying vec3 eyePosition;" +
+				//Using the model view projection (MVP) matrices to transform position
+				//and normal into eye space and clip space
+				"uniform mat4 model;" +
+				"uniform mat4 view;" +
+				"uniform mat4 proj;" +
+				//Main is always the entry point to shader code, like normal programs
+				"void main() {" +
+				//Transform the normal and position values to eye space for lighting calculations
+				"	eyeNormal = mat3( view * model ) * normal;" +
+				"	eyePosition = vec3( view * model * vec4( position, 1.0 ) );" +
+				//Transform the position into clip coordinates as the primary output for this shader
+				"	gl_Position = proj * view * model * vec4( position, 1.0 );" +
+				"}";
 		
-		String vertexShaderCode = "";
-		BufferedReader vertexBR = new BufferedReader(new InputStreamReader(vertexStream));
-		while ((temp = vertexBR.readLine()) != null) {
-			vertexShaderCode += temp;
-		}		
-		vertexBR.close();
-		
-		String fragmentShaderCode = "";
-		BufferedReader fragmentBR = new BufferedReader(new InputStreamReader(fragmentStream));
-		while ((temp = fragmentBR.readLine()) != null) {
-			fragmentShaderCode += temp;
-		}		
-		fragmentBR.close();
+		String fragmentShaderCode =
+				"precision mediump float;" +
+				//These are the values calculated in the vertex shader, interpolated for each pixel
+				"varying vec3 eyeNormal;" +
+				"varying vec3 eyePosition;" +
+				//Uniforms used to calculate lighting values for this pixel
+				"uniform mat4 view;" +
+				"uniform vec4 lightPosition;" +
+				"uniform vec3 diffuseColor;" +
+				"void main() {" +
+				//Calculate the light position in eye space
+				"	vec4 eyeLightPosition = view * lightPosition;" +
+				//Normalize the normal in eyespace in case the interpolation made it longer or shorter than 1
+				"	vec3 normal = normalize( eyeNormal );" +
+				//Calculate the direction from this pixel to the light position in eye space
+				"	vec3 toLightDir = normalize( eyeLightPosition.xyz - eyeLightPosition.w * eyePosition );" +
+				//Calculate the direction from the light to this pixel in eye space
+				"	vec3 toViewerDir = normalize( -eyePosition );" +
+				//These are hardcoded properties of the light and object; in a better shader, these would
+				//also be provided as uniforms; for this shader, we assume the light is pure, full white
+				//and the object reflects pure white light in the perfect reflection direction (which is a typical
+				//case)
+				"	vec3 lightIntensity = vec3( 1.0, 1.0, 1.0 );" +
+				"	vec3 specularColor = vec3( 1.0, 1.0, 1.0 );" +
+				"	float specExp = 40.0;" +
+				//Calculate an approximation of the reflection direction
+				"	vec3 halfAngle = normalize( toLightDir + toViewerDir );" +
+				//Again, here this is a hardcoded value for the ambient light in the scene; it is assume to be pure white
+				//at 20% intensity, and objects reflect their diffuse color at that intensity
+				"	vec3 ambientColor = 0.2 * diffuseColor;" +
+				//These determine the contribution of each lighting term to the overall color of the pixel
+				"	vec3 ambient = ambientColor;" +
+				"	vec3 diffuse = diffuseColor * max ( dot( normal, toLightDir ), 0.0 );" +
+				"	vec3 specular = specularColor * pow( max( dot( normal, halfAngle ), 0.0 ), specExp );" +
+				//The primary output of this fragment shader is the color of this pixel, represented in a vec4
+				"	gl_FragColor = vec4( lightIntensity * ( ambient + diffuse + specular ), 1.0 );" +
+				"}";
 		
 		//Create the shader
 		GLES20Shader shader = new GLES20Shader();
@@ -81,7 +123,7 @@ public class GLES20ShaderFactory {
 		shader.addUniform("diffuseColor");
 		
 		//Return the created shader object
-		GLES20ShaderFactory.mShaders.put(shaderName, shader);	
+		GLES20ShaderFactory.mShaders.put("diffuseSpecular", shader);	
 	}
 	
 	public static GLES20Shader getShader(String shaderName) {		
