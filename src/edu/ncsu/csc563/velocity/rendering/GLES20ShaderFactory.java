@@ -36,7 +36,13 @@ public class GLES20ShaderFactory {
 	 * lighting in color provided in diffuseColor
 	 * @return shader with diffuse/specular lighting
 	 */
-	public static void diffuseSpecular() {		
+	public static void diffuseSpecular() {	
+		if (GLES20ShaderFactory.getShader("diffuseSpecular") == null) {
+			GLES20ShaderFactory.mShaders.put("diffuseSpecular", new GLES20Shader());	
+		}
+		
+		GLES20Shader shader = GLES20ShaderFactory.mShaders.get("diffuseSpecular");
+		
 		String vertexShaderCode =
 				"precision mediump float;" +
 				//Take in provided position and normal data
@@ -100,8 +106,8 @@ public class GLES20ShaderFactory {
 				"	gl_FragColor = vec4( lightIntensity * ( ambient + diffuse + specular ), 1.0 );" +
 				"}";
 		
-		//Create the shader
-		GLES20Shader shader = new GLES20Shader();
+		//Get a handle for the shader
+		shader.createProgram();
 		
 		//Add the vertex and fragment shader code to the shader
 		shader.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
@@ -120,10 +126,7 @@ public class GLES20ShaderFactory {
 		shader.addUniform("view");
 		shader.addUniform("proj");
 		shader.addUniform("lightPosition");
-		shader.addUniform("diffuseColor");
-		
-		//Return the created shader object
-		GLES20ShaderFactory.mShaders.put("diffuseSpecular", shader);	
+		shader.addUniform("diffuseColor");	
 	}
 	
 	public static GLES20Shader getShader(String shaderName) {		

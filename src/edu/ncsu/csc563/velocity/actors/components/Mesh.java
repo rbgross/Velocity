@@ -18,12 +18,6 @@ public class Mesh extends Component {
 	private IntBuffer mElements;
 	
 	public Mesh(float[] rawVertices, int[] rawElements) {
-		//Generate handles for buffers to store data on the graphics card
-		//mBufferHandles[0] is the handle to the vertex buffer
-		//mBufferHandles[1] is the handle to the element buffer
-		this.mBufferHandles = new int[2];
-		GLES20.glGenBuffers(2, this.mBufferHandles, 0);
-		
 		//Order the data in the vertex array and store it in a float buffer
         ByteBuffer vertexBB = ByteBuffer.allocateDirect(rawVertices.length * 4);
         vertexBB.order(ByteOrder.nativeOrder());
@@ -31,16 +25,27 @@ public class Mesh extends Component {
         this.mVertices.put(rawVertices);
         this.mVertices.position(0);
         
-        //Bind the vertex buffer generated earlier, and put the buffered vertex data on the graphics card
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, this.mBufferHandles[0]);
-		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, 4 * this.mVertices.capacity(), this.mVertices, GLES20.GL_STATIC_DRAW);
-        
-		//Order the data in the mElements array and store it in a int buffer
+        //Order the data in the mElements array and store it in a int buffer
         ByteBuffer elementBB = ByteBuffer.allocateDirect(rawElements.length * 4);
         elementBB.order(ByteOrder.nativeOrder());
         this.mElements = elementBB.asIntBuffer();
         this.mElements.put(rawElements);
         this.mElements.position(0);
+        
+        //Generate handles for buffers to store data on the graphics card
+      	this.mBufferHandles = new int[2];		
+		
+		this.setOGLResources();
+	}
+	
+	public void setOGLResources() {
+		//mBufferHandles[0] is the handle to the vertex buffer
+      	//mBufferHandles[1] is the handle to the element buffer
+		GLES20.glGenBuffers(2, this.mBufferHandles, 0);
+        
+        //Bind the vertex buffer generated earlier, and put the buffered vertex data on the graphics card
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, this.mBufferHandles[0]);
+		GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, 4 * this.mVertices.capacity(), this.mVertices, GLES20.GL_STATIC_DRAW);
 		
         //Bind the element buffer generated earlier and put the buffered data on the graphics card
 		GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, this.mBufferHandles[1]);

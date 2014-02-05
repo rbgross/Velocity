@@ -30,8 +30,14 @@ public class GLES20Shader {
 	 * Construct a shader object
 	 */
 	public GLES20Shader() {
-		this.mProgram = GLES20.glCreateProgram();
 		this.mUniforms = new HashMap<String, Integer>();
+	}
+	
+	/**
+	 * Get the OpenGL handle for this shader
+	 */
+	public void createProgram() {
+		this.mProgram = GLES20.glCreateProgram();
 	}
 	
 	/**
