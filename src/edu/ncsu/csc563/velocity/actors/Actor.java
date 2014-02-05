@@ -5,14 +5,19 @@ import java.util.HashMap;
 import android.opengl.Matrix;
 import android.os.SystemClock;
 
+import edu.ncsu.csc563.velocity.GLES20InteractiveSurfaceView;
 import edu.ncsu.csc563.velocity.actors.components.*;
 import edu.ncsu.csc563.velocity.rendering.GLES20Shader;
 
 public class Actor {
 	private HashMap<String, Component> mComponents;
 	
+	private float angle;
+	
 	public Actor() {
 		this.mComponents = new HashMap<String, Component>();
+		
+		angle = 0;
 	}
 	
 	public void addComponent(String componentName, Component component) {
@@ -25,10 +30,16 @@ public class Actor {
 	
 	public void update() {
 		//Temporarily hardcoded in; should be its own component
+		//float model[] = new float[16];
+		//Matrix.setIdentityM(model, 0);		
+		//long time = SystemClock.uptimeMillis() % 4000L;
+		//float angle = 0.090f * ((int)time);
+		//Matrix.setRotateM(model, 0, angle, 0, 1, 0);
+		//((Transform) this.getComponent("Transform")).setModel(model);
+		
 		float model[] = new float[16];
 		Matrix.setIdentityM(model, 0);		
-		long time = SystemClock.uptimeMillis() % 4000L;
-		float angle = 0.090f * ((int)time);
+		angle += GLES20InteractiveSurfaceView.angle;
 		Matrix.setRotateM(model, 0, angle, 0, 1, 0);
 		((Transform) this.getComponent("Transform")).setModel(model);
 	}
