@@ -13,6 +13,7 @@ public class Scene {
 	//private ArrayList<Actor> mActors;
 	public static Scene instance;
 	private Actor cube;
+	private static boolean paused = false;
 	
 	private Scene() {
 		//this.mActors = new ArrayList<Actor>();
@@ -30,8 +31,8 @@ public class Scene {
 	public void updateScene() {
 		//for (Actor actor : this.mActors) {
 		//	actor.update();
-		//}		
-		this.cube.update();
+		//}
+		if (!paused) this.cube.update();
 	}
 	
 	public void drawScene() {
@@ -39,5 +40,17 @@ public class Scene {
 		//	actor.draw();
 		//}
 		this.cube.draw();
+	}
+	
+	public static boolean isPaused() {
+		return paused;
+	}
+	
+	public static void pause() {
+		paused = true;
+	}
+	
+	public static void unPause() {
+		paused = false;
 	}
 }

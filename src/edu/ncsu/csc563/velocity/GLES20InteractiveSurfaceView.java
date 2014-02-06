@@ -1,6 +1,7 @@
 package edu.ncsu.csc563.velocity;
 
 import edu.ncsu.csc563.velocity.rendering.GLES20Renderer;
+import edu.ncsu.csc563.velocity.scene.Scene;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -44,7 +45,19 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-    	shouldReset = true;
+    	switch (e.getAction()) {
+        	case MotionEvent.ACTION_DOWN:
+        		if (!Scene.isPaused()) {
+            		Scene.pause();
+            	} else {
+            		Scene.unPause();
+            	}
+        		break;
+
+    	}
+    	//shouldReset = true;
+    	
+    	
     	return true;
     }
 
@@ -70,7 +83,10 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 		yAngle = this.mGravity[1];
 		zAngle = this.mGravity[2];
 		
-		Log.d("Accelerometer", String.valueOf(this.mGravity[0]) + ", " + String.valueOf(this.mGravity[1]) + ", " + String.valueOf(this.mGravity[2]));
+		double angle = Math.atan2(xAngle, yAngle)/(Math.PI/180);
+		Log.d("Accel", angle + "");
+		
+		//Log.d("Accelerometer", String.valueOf(this.mGravity[0]) + ", " + String.valueOf(this.mGravity[1]) + ", " + String.valueOf(this.mGravity[2]));
 	}
 	
 	private void handleMagneticField(SensorEvent event) {
