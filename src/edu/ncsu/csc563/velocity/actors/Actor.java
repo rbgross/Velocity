@@ -12,12 +12,11 @@ import edu.ncsu.csc563.velocity.rendering.GLES20Shader;
 public class Actor {
 	private HashMap<String, Component> mComponents;
 	
-	private float angle;
+	private float xAngle;
+	private float zAngle;
 	
 	public Actor() {
 		this.mComponents = new HashMap<String, Component>();
-		
-		angle = 0;
 	}
 	
 	public void addComponent(String componentName, Component component) {
@@ -37,11 +36,16 @@ public class Actor {
 		//Matrix.setRotateM(model, 0, angle, 0, 1, 0);
 		//((Transform) this.getComponent("Transform")).setModel(model);
 		
-		float model[] = new float[16];
-		Matrix.setIdentityM(model, 0);		
-		angle += GLES20InteractiveSurfaceView.angle;
-		Matrix.setRotateM(model, 0, angle, 0, 1, 0);
-		((Transform) this.getComponent("Transform")).setModel(model);
+		float model[] = ((Transform) this.getComponent("Transform")).getModel();
+		if (GLES20InteractiveSurfaceView.shouldReset) {
+			GLES20InteractiveSurfaceView.shouldReset = false;
+			Matrix.setIdentityM(model, 0);
+		}
+		
+		xAngle = GLES20InteractiveSurfaceView.yAngle;
+		zAngle = GLES20InteractiveSurfaceView.zAngle;
+		
+		Matrix.translateM(model, 0, xAngle/20, zAngle/20, 0);
 	}
 	
 	public void draw() {

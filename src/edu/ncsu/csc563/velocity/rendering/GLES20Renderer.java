@@ -56,11 +56,11 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		//Calculate the value for a view matrix and store that value for this
 		//shader on the graphics card
 		float view[] = new float[16];		
-		Matrix.setLookAtM(view, 0, 2.5f, 2.5f, 2.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+		Matrix.setLookAtM(view, 0, 0f, 0f, 10.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 		this.mActiveShader.setUniform("view", view);
 		
 		//Store the value for the light position on the graphics card
-		float lightPos[] = {1.0f, 1.0f, -1.0f, 0.0f};
+		float lightPos[] = {0.0f, 0.0f, -1.0f, 0.0f};
 		this.mActiveShader.setUniform("lightPosition", lightPos);
 		
 		this.mScene = Scene.getInstance();
