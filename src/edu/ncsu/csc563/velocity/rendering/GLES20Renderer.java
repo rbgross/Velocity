@@ -33,7 +33,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		String modelName = "meshes/Cube.vmf";
+		String modelName = "meshes/RoundedCube.vmf";
 		try {
 			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
 		} catch (IOException e) {
@@ -60,7 +60,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		this.mActiveShader.setUniform("view", view);
 		
 		//Store the value for the light position on the graphics card
-		float lightPos[] = {0.0f, 0.0f, -1.0f, 0.0f};
+		float lightPos[] = {1.0f, 1.0f, 1.0f, 0.0f};
 		this.mActiveShader.setUniform("lightPosition", lightPos);
 		
 		this.mScene = Scene.getInstance();
