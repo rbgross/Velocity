@@ -37,10 +37,6 @@ public class Actor {
 		//((Transform) this.getComponent("Transform")).setModel(model);
 		
 		float model[] = ((Transform) this.getComponent("Transform")).getModel();
-		if (GLES20InteractiveSurfaceView.shouldReset) {
-			GLES20InteractiveSurfaceView.shouldReset = false;
-			Matrix.setIdentityM(model, 0);
-		}
 		
 		xAngle = GLES20InteractiveSurfaceView.yAngle;
 		zAngle = GLES20InteractiveSurfaceView.zAngle;
