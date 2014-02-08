@@ -1,5 +1,7 @@
 package edu.ncsu.csc563.velocity;
 
+import java.util.Arrays;
+
 import edu.ncsu.csc563.velocity.rendering.GLES20Renderer;
 import edu.ncsu.csc563.velocity.scene.Scene;
 import android.content.Context;
@@ -26,7 +28,8 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
     public static float yAngle;
     public static float zAngle;
     
-    public static boolean shouldReset;
+    public static boolean shouldReset = true;
+    public static float[] baseOrientation = new float[3];
 	
 	
     public GLES20InteractiveSurfaceView(Context context) {
@@ -55,8 +58,6 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         		break;
 
     	}
-    	//shouldReset = true;
-    	
     	
     	return true;
     }
@@ -75,6 +76,16 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 				this.handleMagneticField(event);
 				break;
 		}
+		if (mGravity != null && mGeomagnetic != null) {
+			float R[] = new float[9];
+			float I[] = new float[9];
+			boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
+			if (success) {
+				SensorManager.getOrientation(R, baseOrientation);
+				shouldReset = false;
+				Log.d("Orientation", Arrays.toString(baseOrientation));
+			}
+		}
 	}
 	
 	private void handleAccelerometer(SensorEvent event) {		
@@ -83,10 +94,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 		yAngle = this.mGravity[1];
 		zAngle = this.mGravity[2];
 		
-		double angle = Math.atan2(xAngle, yAngle)/(Math.PI/180);
-		Log.d("Accel", angle + "");
-		
-		//Log.d("Accelerometer", String.valueOf(this.mGravity[0]) + ", " + String.valueOf(this.mGravity[1]) + ", " + String.valueOf(this.mGravity[2]));
+		//Log.d("Accelerometer", this.mGravity[0] + ", " + this.mGravity[1] + ", " + this.mGravity[2]);
 	}
 	
 	private void handleMagneticField(SensorEvent event) {
