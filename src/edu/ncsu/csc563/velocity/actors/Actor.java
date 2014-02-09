@@ -39,10 +39,12 @@ public class Actor {
 		
 		float model[] = ((Transform) this.getComponent("Transform")).getModel();
 		
-		xAngle = GLES20InteractiveSurfaceView.yAngle;
-		zAngle = GLES20InteractiveSurfaceView.zAngle;
+		//xAngle = GLES20InteractiveSurfaceView.yAngle;
+		//zAngle = GLES20InteractiveSurfaceView.zAngle;
 		
-		Matrix.translateM(model, 0, xAngle/10, zAngle/10, 0);
+		//Matrix.translateM(model, 0, xAngle/10, zAngle/10, 0);
+		
+		Matrix.translateM(model, 0, GLES20InteractiveSurfaceView.tilt/10, GLES20InteractiveSurfaceView.roll, 0);
 		
 		model[12] = Math.min(model[12], 13.0f);
 		model[12] = Math.max(model[12], -13.0f);

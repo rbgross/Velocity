@@ -1,7 +1,5 @@
 package edu.ncsu.csc563.velocity;
 
-import java.util.Arrays;
-
 import edu.ncsu.csc563.velocity.rendering.GLES20Renderer;
 import edu.ncsu.csc563.velocity.scene.Scene;
 import android.content.Context;
@@ -20,15 +18,17 @@ import android.view.MotionEvent;
 public class GLES20InteractiveSurfaceView extends GLSurfaceView implements SensorEventListener {
 	private SensorManager mSensorManager;
     private Sensor mAccelerometer;    
-    //private Sensor mMagneticField;
     private float[] mGravity;
-    //private float[] mGeomagnetic;
     
     public static float xAngle;
     public static float yAngle;
     public static float zAngle;
     
-    //public static float[] baseOrientation = new float[3];
+    private float baseRoll;
+    private float baseTilt;
+    
+    public static float roll;
+    public static float tilt;
 	
     public GLES20InteractiveSurfaceView(Context context) {
         super(context);
@@ -41,10 +41,6 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         
         this.mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         this.mAccelerometer = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        //this.mMagneticField = this.mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        
-        this.mGravity = new float[3];
-        //this.mGeomagnetic = new float[3];
     }
 
     @Override
@@ -67,61 +63,42 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {		
-		switch(event.sensor.getType()) {
-			case Sensor.TYPE_ACCELEROMETER:
-				this.handleAccelerometer(event);
-				break;
-			/*
-			case Sensor.TYPE_MAGNETIC_FIELD:
-				this.handleMagneticField(event);
-				break;
-			*/
-		}
-		/*
-		if (mGravity != null && mGeomagnetic != null) {
-			float R[] = new float[9];
-			float I[] = new float[9];
-			boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
-			if (success) {
-				SensorManager.getOrientation(R, baseOrientation);
-				Log.d("Orientation", Arrays.toString(baseOrientation));
-			}
-		}
-		*/
+		this.handleAccelerometer(event);				
 	}
 	
 	private void handleAccelerometer(SensorEvent event) {		
-		this.mGravity[0] = event.values[0];
-		this.mGravity[1] = event.values[1];
-		this.mGravity[2] = event.values[2];
-		xAngle = this.mGravity[0];
-		yAngle = this.mGravity[1];
-		zAngle = this.mGravity[2];
+		if (this.mGravity != null) {
+			//xAngle = event.values[0];
+			//yAngle = event.values[1];
+			//zAngle = event.values[2];
+			//zAngle = (float) Math.atan2(event.values[2], this.mGravity[2]);
+			
+			roll = (float) Math.atan2(event.values[2], event.values[0]) - this.baseRoll;
+			tilt = event.values[1] - this.baseTilt;
+		} else {
+			this.mGravity = event.values;
+			
+			this.baseRoll = (float) Math.atan2(this.mGravity[2], this.mGravity[0]);
+			this.baseTilt = this.mGravity[1];
+			
+			Log.d("BaseRoll", String.valueOf(this.baseRoll));
+		}
 		
-		//Log.d("Accelerometer", this.mGravity[0] + ", " + this.mGravity[1] + ", " + this.mGravity[2]);
+		//Log.d("zAngle", String.valueOf(Math.atan2(zAngle, xAngle)));
+		
+		//Log.d("mGravity", String.valueOf(event.values[0]) + ", " + String.valueOf(event.values[1]) + ", " + String.valueOf(event.values[2]));
 	}
-	
-	/*
-	private void handleMagneticField(SensorEvent event) {
-		this.mGeomagnetic[0] = event.values[0];
-		this.mGeomagnetic[1] = event.values[1];
-		this.mGeomagnetic[2] = event.values[2];
-		//Log.d("Magnetic Field", String.valueOf(this.mGeomagnetic[0]) + ", " + String.valueOf(this.mGeomagnetic[1]) + ", " + String.valueOf(this.mGeomagnetic[2]));
-	}
-	*/
 	
 	@Override
 	public void onPause() {
 		super.onPause();
 		this.mSensorManager.unregisterListener(this);
-		this.mGravity = null;
-		//this.mGeomagnetic = null;
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
-		this.mSensorManager.registerListener(this, this.mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-		//this.mSensorManager.registerListener(this, this.mMagneticField, SensorManager.SENSOR_DELAY_NORMAL);
+		this.mSensorManager.registerListener(this, this.mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+		this.mGravity = null;
 	}	
 }
