@@ -67,12 +67,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 	}
 	
 	private void handleAccelerometer(SensorEvent event) {		
-		if (this.mGravity != null) {
-			//xAngle = event.values[0];
-			//yAngle = event.values[1];
-			//zAngle = event.values[2];
-			//zAngle = (float) Math.atan2(event.values[2], this.mGravity[2]);
-			
+		if (this.mGravity != null) {			
 			roll = (float) Math.atan2(event.values[2], event.values[0]) - this.baseRoll;
 			tilt = event.values[1] - this.baseTilt;
 		} else {
@@ -83,10 +78,6 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 			
 			Log.d("BaseRoll", String.valueOf(this.baseRoll));
 		}
-		
-		//Log.d("zAngle", String.valueOf(Math.atan2(zAngle, xAngle)));
-		
-		//Log.d("mGravity", String.valueOf(event.values[0]) + ", " + String.valueOf(event.values[1]) + ", " + String.valueOf(event.values[2]));
 	}
 	
 	@Override

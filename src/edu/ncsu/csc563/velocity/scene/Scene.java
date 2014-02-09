@@ -1,24 +1,18 @@
 package edu.ncsu.csc563.velocity.scene;
 
-import java.util.ArrayList;
-
-import android.opengl.Matrix;
-
-import edu.ncsu.csc563.velocity.GLES20InteractiveSurfaceView;
 import edu.ncsu.csc563.velocity.actors.Actor;
 import edu.ncsu.csc563.velocity.actors.ActorFactory;
-import edu.ncsu.csc563.velocity.actors.components.Transform;
 
 public class Scene {
 	//private ArrayList<Actor> mActors;
 	public static Scene instance;
-	private Actor cube;
+	private Actor mActor;
 	private static boolean paused = false;
 	
 	private Scene() {
 		//this.mActors = new ArrayList<Actor>();
 		//this.mActors.add(ActorFactory.cube());
-		this.cube = ActorFactory.cube();
+		this.mActor = ActorFactory.cube();
 	}
 	
 	public static Scene getInstance() {
@@ -32,14 +26,14 @@ public class Scene {
 		//for (Actor actor : this.mActors) {
 		//	actor.update();
 		//}
-		if (!paused) this.cube.update();
+		if (!paused) this.mActor.update();
 	}
 	
 	public void drawScene() {
 		//for (Actor actor : this.mActors) {
 		//	actor.draw();
 		//}
-		this.cube.draw();
+		this.mActor.draw();
 	}
 	
 	public static boolean isPaused() {
