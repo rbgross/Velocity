@@ -1,10 +1,8 @@
 package edu.ncsu.csc563.velocity.actors;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import android.opengl.Matrix;
-
-import edu.ncsu.csc563.velocity.GLES20InteractiveSurfaceView;
 import edu.ncsu.csc563.velocity.actors.components.*;
 import edu.ncsu.csc563.velocity.rendering.GLES20Shader;
 
@@ -24,13 +22,9 @@ public class Actor {
 	}
 	
 	public void update() {		
-		float model[] = ((Transform) this.getComponent("Transform")).getModel();
-		Matrix.translateM(model, 0, GLES20InteractiveSurfaceView.tilt/10, GLES20InteractiveSurfaceView.roll, 0);
-		
-		model[12] = Math.min(model[12], 13.0f);
-		model[12] = Math.max(model[12], -13.0f);
-		model[13] = Math.min(model[13], 7.5f);
-		model[13] = Math.max(model[13], -7.5f);
+		for (Map.Entry<String, Component> entry : this.mComponents.entrySet()) {
+			entry.getValue().update();
+		}
 	}
 	
 	public void draw() {

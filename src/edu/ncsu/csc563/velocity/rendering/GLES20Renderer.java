@@ -33,7 +33,15 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		String modelName = "meshes/RoundedCube.vmf";
+		String modelName;
+		modelName = "meshes/RoundedCube.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/LongRoundedRectPrism.vmf";
 		try {
 			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
 		} catch (IOException e) {

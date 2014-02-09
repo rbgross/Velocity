@@ -11,6 +11,7 @@ public class ActorFactory {
 		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/RoundedCube.vmf"));
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.0f, 0.5f, 1.0f);
+		actor.addComponent("Controller", new Controller(((Transform) actor.getComponent("Transform"))));
 		return actor;
 	}
 	
@@ -20,6 +21,15 @@ public class ActorFactory {
 		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/Dragon.vmf"));
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.5f, 1.0f, 0.0f);
+		return actor;
+	}
+	
+	public static Actor rectPrism() {
+		Actor actor = new Actor();
+		actor.addComponent("Transform", new Transform());
+		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/LongRoundedRectPrism.vmf"));
+		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
+		((Material) actor.getComponent("Material")).setDiffuseColor(1.0f, 1.0f, 1.0f);
 		return actor;
 	}
 }

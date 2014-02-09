@@ -8,7 +8,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -75,8 +74,6 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 			
 			this.baseRoll = (float) Math.atan2(this.mGravity[2], this.mGravity[0]);
 			this.baseTilt = this.mGravity[1];
-			
-			Log.d("BaseRoll", String.valueOf(this.baseRoll));
 		}
 	}
 	

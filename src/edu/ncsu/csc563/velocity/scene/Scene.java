@@ -1,18 +1,93 @@
 package edu.ncsu.csc563.velocity.scene;
 
+import java.util.ArrayList;
+
 import edu.ncsu.csc563.velocity.actors.Actor;
 import edu.ncsu.csc563.velocity.actors.ActorFactory;
+import edu.ncsu.csc563.velocity.actors.components.Transform;
 
 public class Scene {
-	//private ArrayList<Actor> mActors;
+	private ArrayList<Actor> mActors;
 	public static Scene instance;
-	private Actor mActor;
 	private static boolean paused = false;
 	
 	private Scene() {
-		//this.mActors = new ArrayList<Actor>();
-		//this.mActors.add(ActorFactory.cube());
-		this.mActor = ActorFactory.cube();
+		this.mActors = new ArrayList<Actor>();
+		this.mActors.add(ActorFactory.cube());
+		
+		/*
+		Actor actor;		
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(2, 0, -12);
+		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(-2, 0, -12);
+		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(0, 2, -8);
+		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(0, -2, -8);
+		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(2, 0, -4);
+		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(-2, 0, -4);
+		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(0, 2, 0);
+		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(0, -2, 0);
+		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(2, 0, 4);
+		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(-2, 0, 4);
+		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(0, 2, 8);
+		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(0, -2, 8);
+		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(2, 0, 12);
+		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
+		this.mActors.add(actor);
+		
+		actor = ActorFactory.rectPrism();
+		((Transform) actor.getComponent("Transform")).setPosition(-2, 0, 12);
+		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
+		this.mActors.add(actor);
+		*/
 	}
 	
 	public static Scene getInstance() {
@@ -23,17 +98,17 @@ public class Scene {
 	}
 	
 	public void updateScene() {
-		//for (Actor actor : this.mActors) {
-		//	actor.update();
-		//}
-		if (!paused) this.mActor.update();
+		if (!paused) {
+			for (Actor actor : this.mActors) {
+				actor.update();
+			}
+		}
 	}
 	
 	public void drawScene() {
-		//for (Actor actor : this.mActors) {
-		//	actor.draw();
-		//}
-		this.mActor.draw();
+		for (Actor actor : this.mActors) {
+			actor.draw();
+		}
 	}
 	
 	public static boolean isPaused() {

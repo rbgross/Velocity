@@ -59,10 +59,9 @@ public class Transform extends Component{
 			Matrix.setIdentityM(this.mModel, 0);
 			Matrix.scaleM(this.mModel, 0, this.mScale[0], this.mScale[1], this.mScale[2]);
 			Matrix.translateM(this.mModel, 0, this.mPosition[0], this.mPosition[1], this.mPosition[2]);
-			float[] tempRot = new float[16];
-			float[] tempModel = this.mModel;
-			Matrix.setRotateEulerM(tempRot, 0, this.mRotation[0], this.mRotation[1], this.mRotation[2]);
-			Matrix.multiplyMM(this.mModel, 0, tempRot, 0, tempModel, 0);
+			Matrix.rotateM(this.mModel, 0, this.mRotation[0], 1, 0, 0);
+			Matrix.rotateM(this.mModel, 0, this.mRotation[1], 0, 1, 0);
+			Matrix.rotateM(this.mModel, 0, this.mRotation[2], 0, 0, 1);
 			this.mChanged = false;
 		}
 		
