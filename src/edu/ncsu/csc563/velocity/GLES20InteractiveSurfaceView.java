@@ -20,15 +20,15 @@ import android.view.MotionEvent;
 public class GLES20InteractiveSurfaceView extends GLSurfaceView implements SensorEventListener {
 	private SensorManager mSensorManager;
     private Sensor mAccelerometer;    
-    private Sensor mMagneticField;
+    //private Sensor mMagneticField;
     private float[] mGravity;
-    private float[] mGeomagnetic;
+    //private float[] mGeomagnetic;
     
     public static float xAngle;
     public static float yAngle;
     public static float zAngle;
     
-    public static float[] baseOrientation = new float[3];
+    //public static float[] baseOrientation = new float[3];
 	
     public GLES20InteractiveSurfaceView(Context context) {
         super(context);
@@ -41,10 +41,10 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         
         this.mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         this.mAccelerometer = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        this.mMagneticField = this.mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        //this.mMagneticField = this.mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         
         this.mGravity = new float[3];
-        this.mGeomagnetic = new float[3];
+        //this.mGeomagnetic = new float[3];
     }
 
     @Override
@@ -71,11 +71,13 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 			case Sensor.TYPE_ACCELEROMETER:
 				this.handleAccelerometer(event);
 				break;
-				
+			/*
 			case Sensor.TYPE_MAGNETIC_FIELD:
 				this.handleMagneticField(event);
 				break;
+			*/
 		}
+		/*
 		if (mGravity != null && mGeomagnetic != null) {
 			float R[] = new float[9];
 			float I[] = new float[9];
@@ -85,6 +87,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 				Log.d("Orientation", Arrays.toString(baseOrientation));
 			}
 		}
+		*/
 	}
 	
 	private void handleAccelerometer(SensorEvent event) {		
@@ -98,25 +101,27 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 		//Log.d("Accelerometer", this.mGravity[0] + ", " + this.mGravity[1] + ", " + this.mGravity[2]);
 	}
 	
+	/*
 	private void handleMagneticField(SensorEvent event) {
 		this.mGeomagnetic[0] = event.values[0];
 		this.mGeomagnetic[1] = event.values[1];
 		this.mGeomagnetic[2] = event.values[2];
 		//Log.d("Magnetic Field", String.valueOf(this.mGeomagnetic[0]) + ", " + String.valueOf(this.mGeomagnetic[1]) + ", " + String.valueOf(this.mGeomagnetic[2]));
 	}
+	*/
 	
 	@Override
 	public void onPause() {
 		super.onPause();
 		this.mSensorManager.unregisterListener(this);
 		this.mGravity = null;
-		this.mGeomagnetic = null;
+		//this.mGeomagnetic = null;
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
 		this.mSensorManager.registerListener(this, this.mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-		this.mSensorManager.registerListener(this, this.mMagneticField, SensorManager.SENSOR_DELAY_NORMAL);
+		//this.mSensorManager.registerListener(this, this.mMagneticField, SensorManager.SENSOR_DELAY_NORMAL);
 	}	
 }

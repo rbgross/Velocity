@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import android.opengl.Matrix;
 import android.os.SystemClock;
+import android.util.Log;
 
 import edu.ncsu.csc563.velocity.GLES20InteractiveSurfaceView;
 import edu.ncsu.csc563.velocity.actors.components.*;
@@ -41,7 +42,12 @@ public class Actor {
 		xAngle = GLES20InteractiveSurfaceView.yAngle;
 		zAngle = GLES20InteractiveSurfaceView.zAngle;
 		
-		Matrix.translateM(model, 0, xAngle/20, zAngle/20, 0);
+		Matrix.translateM(model, 0, xAngle/10, zAngle/10, 0);
+		
+		model[12] = Math.min(model[12], 13.0f);
+		model[12] = Math.max(model[12], -13.0f);
+		model[13] = Math.min(model[13], 7.5f);
+		model[13] = Math.max(model[13], -7.5f);
 	}
 	
 	public void draw() {

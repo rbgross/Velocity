@@ -10,7 +10,7 @@ public class ActorFactory {
 		actor.addComponent("Transform", new Transform());
 		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/RoundedCube.vmf"));
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
-		((Material) actor.getComponent("Material")).setDiffuseColor(0.25f, 0.75f, 1.0f);
+		((Material) actor.getComponent("Material")).setDiffuseColor(0.0f, 0.5f, 1.0f);
 		return actor;
 	}
 }
