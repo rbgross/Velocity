@@ -5,13 +5,13 @@ import edu.ncsu.csc563.velocity.rendering.GLES20ShaderFactory;
 import edu.ncsu.csc563.velocity.utility.ResourceManager;
 
 public class ActorFactory {
-	public static Actor cube() {
+	public static Actor ship() {
 		Actor actor = new Actor();
 		actor.addComponent("Transform", new Transform());
-		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/RoundedCube.vmf"));
+		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/Sphere.vmf"));
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.0f, 0.5f, 1.0f);
-		actor.addComponent("Controller", new Controller(((Transform) actor.getComponent("Transform"))));
+		actor.addComponent("Controller", new PlayerController(((Transform) actor.getComponent("Transform"))));
 		return actor;
 	}
 	
@@ -24,12 +24,22 @@ public class ActorFactory {
 		return actor;
 	}
 	
+	public static Actor cube() {
+		Actor actor = new Actor();
+		actor.addComponent("Transform", new Transform());
+		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/RoundedCube.vmf"));
+		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
+		((Material) actor.getComponent("Material")).setDiffuseColor(0.3f, 0.3f, 0.3f);
+		return actor;
+	}
+	
 	public static Actor rectPrism() {
 		Actor actor = new Actor();
 		actor.addComponent("Transform", new Transform());
 		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/LongRoundedRectPrism.vmf"));
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
-		((Material) actor.getComponent("Material")).setDiffuseColor(1.0f, 1.0f, 1.0f);
+		((Material) actor.getComponent("Material")).setDiffuseColor(0.3f, 0.3f, 0.3f);
+		actor.addComponent("ForcedMotion", new ForcedMotion(((Transform) actor.getComponent("Transform"))));
 		return actor;
 	}
 }

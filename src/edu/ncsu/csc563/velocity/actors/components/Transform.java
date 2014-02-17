@@ -26,6 +26,13 @@ public class Transform extends Component{
 		return this.mPosition;		
 	}
 	
+	public void translate(float x, float y, float z) {
+		this.mPosition[0] += x;
+		this.mPosition[1] += y;
+		this.mPosition[2] += z;
+		this.mChanged = true;
+	}
+	
 	public void setPosition(float x, float y, float z) {
 		this.mPosition[0] = x;
 		this.mPosition[1] = y;
@@ -37,6 +44,27 @@ public class Transform extends Component{
 		return this.mRotation;
 	}
 	
+	/**
+	 * Rotate by an additional amount along the axes.
+	 * 
+	 * @param x additional rotation around the x axis
+	 * @param y additional rotation around the y axis
+	 * @param z additional rotation around the z axis
+	 */
+	public void rotate(float x, float y, float z) {
+		this.mRotation[0] += x;
+		this.mRotation[1] += y;
+		this.mRotation[2] += z;
+		this.mChanged = true;	
+	}
+	
+	/**
+	 * Set rotation amounts around each axis.
+	 * 
+	 * @param x rotation around the x axis
+	 * @param y rotation around the y axis
+	 * @param z rotation around the z axis
+	 */
 	public void setRotation(float x, float y, float z) {
 		this.mRotation[0] = x;
 		this.mRotation[1] = y;

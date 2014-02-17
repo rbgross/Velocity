@@ -34,6 +34,13 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		String modelName;
+		modelName = "meshes/Sphere.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
 		modelName = "meshes/RoundedCube.vmf";
 		try {
 			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
@@ -59,12 +66,12 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		GLES20.glEnable(GLES20.GL_CULL_FACE);
 		
 		//Set the default color of the background each time a new frame is drawn
-		GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
 		//Calculate the value for a view matrix and store that value for this
 		//shader on the graphics card
 		float view[] = new float[16];		
-		Matrix.setLookAtM(view, 0, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+		Matrix.setLookAtM(view, 0, 0.0f, 0.0f, 15.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 		this.mActiveShader.setUniform("view", view);
 		
 		//Store the value for the light position on the graphics card

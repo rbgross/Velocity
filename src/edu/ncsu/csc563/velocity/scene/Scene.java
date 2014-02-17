@@ -2,9 +2,8 @@ package edu.ncsu.csc563.velocity.scene;
 
 import java.util.ArrayList;
 
-import edu.ncsu.csc563.velocity.actors.Actor;
-import edu.ncsu.csc563.velocity.actors.ActorFactory;
-import edu.ncsu.csc563.velocity.actors.components.Transform;
+import edu.ncsu.csc563.velocity.actors.*;
+import edu.ncsu.csc563.velocity.actors.components.*;
 
 public class Scene {
 	private ArrayList<Actor> mActors;
@@ -13,9 +12,8 @@ public class Scene {
 	
 	private Scene() {
 		this.mActors = new ArrayList<Actor>();
-		this.mActors.add(ActorFactory.cube());
+		this.mActors.add(ActorFactory.ship());
 		
-		/*
 		Actor actor;		
 		
 		actor = ActorFactory.rectPrism();
@@ -87,7 +85,6 @@ public class Scene {
 		((Transform) actor.getComponent("Transform")).setPosition(-2, 0, 12);
 		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
 		this.mActors.add(actor);
-		*/
 	}
 	
 	public static Scene getInstance() {
