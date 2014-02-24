@@ -1,4 +1,4 @@
-package edu.ncsu.csc563.velocity.rendering;
+package edu.ncsu.csc563.velocity.systems.rendering;
 
 import java.io.IOException;
 
@@ -11,8 +11,8 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import edu.ncsu.csc563.velocity.scene.Scene;
-import edu.ncsu.csc563.velocity.utility.ResourceManager;
+import edu.ncsu.csc563.velocity.actors.Scene;
+import edu.ncsu.csc563.velocity.systems.resources.ResourceManager;
 
 /**
  * Renderer for OpenGL ES 2.0
@@ -87,7 +87,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
         //the graphics card
         float proj[] = new float[16];
         float aspect = 1.0f * width / height;        
-        Matrix.perspectiveM(proj, 0, 45, aspect, 1.0f, 100.0f);
+        Matrix.perspectiveM(proj, 0, 45, aspect, 1.0f, 1000.0f);
         this.mActiveShader.setUniform("proj", proj);
 	}
 	

@@ -1,7 +1,7 @@
-package edu.ncsu.csc563.velocity;
+package edu.ncsu.csc563.velocity.systems;
 
-import edu.ncsu.csc563.velocity.rendering.GLES20Renderer;
-import edu.ncsu.csc563.velocity.scene.Scene;
+import edu.ncsu.csc563.velocity.actors.Scene;
+import edu.ncsu.csc563.velocity.systems.rendering.GLES20Renderer;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

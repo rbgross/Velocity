@@ -1,4 +1,4 @@
-package edu.ncsu.csc563.velocity.rendering;
+package edu.ncsu.csc563.velocity.systems.rendering;
 
 import java.util.HashMap;
 

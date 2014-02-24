@@ -1,7 +1,7 @@
 package edu.ncsu.csc563.velocity.actors.components;
 
 import android.opengl.Matrix;
-import edu.ncsu.csc563.velocity.GLES20InteractiveSurfaceView;
+import edu.ncsu.csc563.velocity.systems.GLES20InteractiveSurfaceView;
 
 public class PlayerController extends Component {
 	private Transform mTransform;

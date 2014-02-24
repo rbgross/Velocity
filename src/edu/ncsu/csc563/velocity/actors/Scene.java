@@ -1,8 +1,7 @@
-package edu.ncsu.csc563.velocity.scene;
+package edu.ncsu.csc563.velocity.actors;
 
 import java.util.ArrayList;
 
-import edu.ncsu.csc563.velocity.actors.*;
 import edu.ncsu.csc563.velocity.actors.components.*;
 
 public class Scene {

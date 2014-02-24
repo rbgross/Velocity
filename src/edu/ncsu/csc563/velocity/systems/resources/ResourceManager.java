@@ -1,4 +1,4 @@
-package edu.ncsu.csc563.velocity.utility;
+package edu.ncsu.csc563.velocity.systems.resources;
 
 import java.io.DataInputStream;
 import java.io.IOException;

@@ -1,14 +1,14 @@
 package edu.ncsu.csc563.velocity.actors;
 
 import edu.ncsu.csc563.velocity.actors.components.*;
-import edu.ncsu.csc563.velocity.rendering.GLES20ShaderFactory;
-import edu.ncsu.csc563.velocity.utility.ResourceManager;
+import edu.ncsu.csc563.velocity.systems.rendering.GLES20ShaderFactory;
+import edu.ncsu.csc563.velocity.systems.resources.ResourceManager;
 
 public class ActorFactory {
 	public static Actor ship() {
 		Actor actor = new Actor();
 		actor.addComponent("Transform", new Transform());
-		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/Sphere.vmf"));
+		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/RoundedCube.vmf"));
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.0f, 0.5f, 1.0f);
 		actor.addComponent("Controller", new PlayerController(((Transform) actor.getComponent("Transform"))));
