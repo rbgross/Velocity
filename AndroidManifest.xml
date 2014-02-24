@@ -17,15 +17,17 @@
         android:allowBackup="true"
         android:icon="@drawable/velocityicon2"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.NoTitleBar" >
         <activity
-            android:name="edu.ncsu.csc563.velocity.MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
+            android:name="edu.ncsu.csc563.velocity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="landscape" >"
         </activity>
     </application>
 
