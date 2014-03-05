@@ -1,5 +1,6 @@
 package edu.ncsu.csc563.velocity.systems;
 
+import edu.ncsu.csc563.velocity.R;
 import edu.ncsu.csc563.velocity.actors.Scene;
 import edu.ncsu.csc563.velocity.systems.rendering.GLES20Renderer;
 import android.content.Context;
@@ -7,6 +8,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -15,9 +18,13 @@ import android.view.MotionEvent;
  * touch and accelerometer events
  */
 public class GLES20InteractiveSurfaceView extends GLSurfaceView implements SensorEventListener {
+	private SoundPool mSoundPool;
 	private SensorManager mSensorManager;
+	private AudioManager mAudioManager;
     private Sensor mAccelerometer;    
     private float[] mGravity;
+    private int mSound,mStream;
+    private float mVolume;
     
     public static float xAngle;
     public static float yAngle;
@@ -38,6 +45,15 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(new GLES20Renderer(context));
         
+        // Create a SoundPool and load sounds
+        this.mSoundPool = new SoundPool(4,AudioManager.STREAM_MUSIC,0);
+        this.mSound = mSoundPool.load(context, R.raw.gamemusic,1);
+        this.mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        
+        // Set volume and play sound
+        this.mVolume = (float) mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        this.mStream = mSoundPool.play(mSound, mVolume, mVolume, 1, -1, 1f);
+        
         this.mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         this.mAccelerometer = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
@@ -48,8 +64,10 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         	case MotionEvent.ACTION_DOWN:
         		if (!Scene.isPaused()) {
             		Scene.pause();
+            		mSoundPool.autoPause();
             	} else {
             		Scene.unPause();
+            		mSoundPool.autoResume();
             	}
         		break;
     	}  	
@@ -57,10 +75,8 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
     	return true;
     }
 
-	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
-	@Override
 	public void onSensorChanged(SensorEvent event) {		
 		this.handleAccelerometer(event);				
 	}
@@ -80,12 +96,14 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 	@Override
 	public void onPause() {
 		super.onPause();
+		mSoundPool.pause(mStream);
 		this.mSensorManager.unregisterListener(this);
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
+		mSoundPool.resume(mStream);
 		this.mSensorManager.registerListener(this, this.mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 		this.mGravity = null;
 	}	
