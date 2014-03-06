@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.ncsu.csc563.velocity.actors.components.*;
-import edu.ncsu.csc563.velocity.systems.rendering.GLES20Shader;
+import edu.ncsu.csc563.velocity.rendering.GLES20Shader;
 
 public class Actor {
 	private HashMap<String, Component> mComponents;

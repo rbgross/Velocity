@@ -1,4 +1,4 @@
-package edu.ncsu.csc563.velocity.systems.rendering;
+package edu.ncsu.csc563.velocity.rendering;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import edu.ncsu.csc563.velocity.actors.Scene;
-import edu.ncsu.csc563.velocity.systems.resources.ResourceManager;
+import edu.ncsu.csc563.velocity.resources.ResourceManager;
 
 /**
  * Renderer for OpenGL ES 2.0
@@ -71,11 +71,11 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		//Calculate the value for a view matrix and store that value for this
 		//shader on the graphics card
 		float view[] = new float[16];		
-		Matrix.setLookAtM(view, 0, 0.0f, 0.0f, 15.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+		Matrix.setLookAtM(view, 0, 0.0f, 0.0f, -15.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 		this.mActiveShader.setUniform("view", view);
 		
 		//Store the value for the light position on the graphics card
-		float lightPos[] = {1.0f, 1.0f, 1.0f, 0.0f};
+		float lightPos[] = {1.0f, 1.0f, -1.0f, 0.0f};
 		this.mActiveShader.setUniform("lightPosition", lightPos);
 		
 		this.mScene = Scene.getInstance();

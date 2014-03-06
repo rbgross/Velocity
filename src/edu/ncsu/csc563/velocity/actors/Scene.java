@@ -1,89 +1,22 @@
 package edu.ncsu.csc563.velocity.actors;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
-import edu.ncsu.csc563.velocity.actors.components.*;
+import android.util.Log;
+
+import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
 
 public class Scene {
-	private ArrayList<Actor> mActors;
+	private Actor mPlayer;
+	private LinkedList<Actor> mActors;
 	public static Scene instance;
 	private static boolean paused = false;
 	
-	private Scene() {
-		this.mActors = new ArrayList<Actor>();
-		this.mActors.add(ActorFactory.ship());
+	private Scene() {		
+		this.mPlayer = ActorFactory.ship();
+		this.mActors = new LinkedList<Actor>();
 		
-		Actor actor;		
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(2, 0, -12);
-		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(-2, 0, -12);
-		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(0, 2, -8);
-		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(0, -2, -8);
-		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(2, 0, -4);
-		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(-2, 0, -4);
-		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(0, 2, 0);
-		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(0, -2, 0);
-		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(2, 0, 4);
-		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(-2, 0, 4);
-		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(0, 2, 8);
-		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(0, -2, 8);
-		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(2, 0, 12);
-		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
-		this.mActors.add(actor);
-		
-		actor = ActorFactory.rectPrism();
-		((Transform) actor.getComponent("Transform")).setPosition(-2, 0, 12);
-		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
-		this.mActors.add(actor);
+		this.mActors.addAll(SegmentFactory.pillarSegment(100));
 	}
 	
 	public static Scene getInstance() {
@@ -95,13 +28,32 @@ public class Scene {
 	
 	public void updateScene() {
 		if (!paused) {
+			this.mPlayer.update();
+			
 			for (Actor actor : this.mActors) {
 				actor.update();
 			}
-		}
+			
+			//Remove actors who's backs have moved past the camera
+			float zMin = ((OBBCollider) this.mActors.getFirst().getComponent("OBBCollider")).getZBounds()[1];
+			while (zMin < -15 ) {
+				this.mActors.remove();
+				zMin = ((OBBCollider) this.mActors.getFirst().getComponent("OBBCollider")).getZBounds()[1];
+			}
+			
+			//Check if the max depth is too high; if so, add a new segment
+			float zMax = ((OBBCollider) this.mActors.getLast().getComponent("OBBCollider")).getZBounds()[1];
+			if (zMax < 100) {
+				this.mActors.addAll(SegmentFactory.pillarSegment(zMax));
+			}	
+			
+			Log.e("numActors", "" + this.mActors.size());
+		}	
 	}
 	
 	public void drawScene() {
+		this.mPlayer.draw();
+		
 		for (Actor actor : this.mActors) {
 			actor.draw();
 		}

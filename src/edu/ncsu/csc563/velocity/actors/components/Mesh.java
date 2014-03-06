@@ -5,7 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import edu.ncsu.csc563.velocity.systems.rendering.GLES20Shader;
+import edu.ncsu.csc563.velocity.rendering.GLES20Shader;
 
 import android.opengl.GLES20;
 

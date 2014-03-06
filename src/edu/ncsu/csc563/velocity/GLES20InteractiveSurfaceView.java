@@ -1,8 +1,8 @@
-package edu.ncsu.csc563.velocity.systems;
+package edu.ncsu.csc563.velocity;
 
 import edu.ncsu.csc563.velocity.R;
 import edu.ncsu.csc563.velocity.actors.Scene;
-import edu.ncsu.csc563.velocity.systems.rendering.GLES20Renderer;
+import edu.ncsu.csc563.velocity.rendering.GLES20Renderer;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -12,6 +12,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -19,17 +20,13 @@ import android.view.MotionEvent;
  * touch and accelerometer events
  */
 public class GLES20InteractiveSurfaceView extends GLSurfaceView implements SensorEventListener {
-	private SoundPool mSoundPool;
+	//private SoundPool mSoundPool;
 	private SensorManager mSensorManager;
-	private AudioManager mAudioManager;
+	//private AudioManager mAudioManager;
     private Sensor mAccelerometer;    
     private float[] mGravity;
-    private int mSound = 0;
-    private float mVolume;
-    
-    public static float xAngle;
-    public static float yAngle;
-    public static float zAngle;
+    //private int mSound = 0;
+    //private float mVolume;
     
     private float baseRoll;
     private float baseTilt;
@@ -47,22 +44,24 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         setRenderer(new GLES20Renderer(context));
         
         // Create a SoundPool and load sounds
-        this.mSoundPool = new SoundPool(10,AudioManager.STREAM_MUSIC,0);        
-        this.mSound = mSoundPool.load(context, R.raw.gamemusic,1);
-        this.mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        //this.mSoundPool = new SoundPool(10,AudioManager.STREAM_MUSIC,0);        
+        //this.mSound = mSoundPool.load(context, R.raw.gamemusic,1);
+        //this.mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         
         // Set volume and play sound
-        this.mVolume = (float) mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        //this.mVolume = (float) mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         this.mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         this.mAccelerometer = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         
-        mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
-            public void onLoadComplete(SoundPool mSoundPool, int sampleId,
-                int status) {
-            	if(mSound != 0)
-            		mSoundPool.play(mSound, mVolume, mVolume, 1, -1, 0);
-            }
-          });
+        //mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
+            //public void onLoadComplete(SoundPool mSoundPool, int sampleId,
+                //int status) {
+            	//if(mSound != 0)
+            		//mSoundPool.play(mSound, mVolume, mVolume, 1, -1, 0);
+            //}
+          //});
+        
+        Scene.pause();        
     }
 
     @Override
@@ -71,10 +70,10 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         	case MotionEvent.ACTION_DOWN:
         		if (!Scene.isPaused()) {
             		Scene.pause();
-            		mSoundPool.autoPause();
+            		//mSoundPool.autoPause();
             	} else {
             		Scene.unPause();
-            		mSoundPool.autoResume();
+            		//mSoundPool.autoResume();
             	}
         		break;
     	}  	
@@ -92,6 +91,14 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 		if (this.mGravity != null) {			
 			roll = (float) Math.atan2(event.values[2], event.values[0]) - this.baseRoll;
 			tilt = event.values[1] - this.baseTilt;
+			
+			if (Math.abs(roll) < 0.02f) {
+				roll = 0;
+			}
+			
+			if (Math.abs(tilt) < 0.14f) {
+				tilt = 0;
+			}
 		} else {
 			this.mGravity = event.values;
 			

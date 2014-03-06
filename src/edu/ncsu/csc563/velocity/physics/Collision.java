@@ -1,4 +1,4 @@
-package edu.ncsu.csc563.velocity.systems.physics;
+package edu.ncsu.csc563.velocity.physics;
 
 import edu.ncsu.csc563.velocity.actors.components.*;
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;

@@ -1,6 +1,5 @@
 package edu.ncsu.csc563.velocity;
 
-import edu.ncsu.csc563.velocity.systems.GLES20InteractiveSurfaceView;
 import android.os.Bundle;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
