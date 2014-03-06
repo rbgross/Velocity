@@ -31,6 +31,9 @@ public class ActorFactory {
 		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/RoundedCube.vmf"));
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.3f, 0.3f, 0.3f);
+		float[] halfWidths = {0.5f, 0.5f, 0.5f};
+		actor.addComponent("OBBCollider", new OBBCollider((Transform) actor.getComponent("Transform"), halfWidths));
+		actor.addComponent("ForcedMovement", new ForcedMovement((Transform) actor.getComponent("Transform")));
 		return actor;
 	}
 	

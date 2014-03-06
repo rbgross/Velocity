@@ -72,6 +72,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
             		Scene.pause();
             		//mSoundPool.autoPause();
             	} else {
+            		this.mGravity = null;
             		Scene.unPause();
             		//mSoundPool.autoResume();
             	}

@@ -10,10 +10,10 @@ public class Segment {
 	private ArrayList<Float> mDepths;
 	private float zMin;
 	private float zMax;
-	private float zDepth;
+	private float gap;
 	
-	public Segment(float zDepth) {
-		this.zDepth = zDepth;
+	public Segment(float gap) {
+		this.gap = gap;
 		this.mActors = new ArrayList<Actor>();
 		this.mDepths = new ArrayList<Float>();
 		this.zMin = Float.MAX_VALUE;
@@ -46,11 +46,12 @@ public class Segment {
 		}
 	}
 	
-	public ArrayList<Actor> getActors() {
-		float zPos = this.zDepth - this.zMin;
-		for (Actor actor : this.mActors) {
+	public ArrayList<Actor> getActors(float zDepth) {
+		ArrayList<Actor> actors = new ArrayList<Actor>(this.mActors);
+		float zPos = zDepth - this.zMin + this.gap;
+		for (Actor actor : actors) {
 			((Transform) actor.getComponent("Transform")).translate(0, 0, zPos);
 		}
-		return this.mActors;
+		return actors;
 	}
 }

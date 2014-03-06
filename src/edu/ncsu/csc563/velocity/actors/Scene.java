@@ -2,8 +2,6 @@ package edu.ncsu.csc563.velocity.actors;
 
 import java.util.LinkedList;
 
-import android.util.Log;
-
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
 
 public class Scene {
@@ -16,7 +14,7 @@ public class Scene {
 		this.mPlayer = ActorFactory.ship();
 		this.mActors = new LinkedList<Actor>();
 		
-		this.mActors.addAll(SegmentFactory.pillarSegment(100));
+		this.mActors.addAll(SegmentFactory.getRandomSegment(200));
 	}
 	
 	public static Scene getInstance() {
@@ -43,11 +41,9 @@ public class Scene {
 			
 			//Check if the max depth is too high; if so, add a new segment
 			float zMax = ((OBBCollider) this.mActors.getLast().getComponent("OBBCollider")).getZBounds()[1];
-			if (zMax < 100) {
-				this.mActors.addAll(SegmentFactory.pillarSegment(zMax));
+			if (zMax < 200) {
+				this.mActors.addAll(SegmentFactory.getRandomSegment(zMax));
 			}	
-			
-			Log.e("numActors", "" + this.mActors.size());
 		}	
 	}
 	
