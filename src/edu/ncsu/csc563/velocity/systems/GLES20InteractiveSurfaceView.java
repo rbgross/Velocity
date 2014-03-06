@@ -10,6 +10,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -23,7 +24,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 	private AudioManager mAudioManager;
     private Sensor mAccelerometer;    
     private float[] mGravity;
-    private int mSound,mStream;
+    private int mSound = 0;
     private float mVolume;
     
     public static float xAngle;
@@ -46,16 +47,22 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         setRenderer(new GLES20Renderer(context));
         
         // Create a SoundPool and load sounds
-        this.mSoundPool = new SoundPool(4,AudioManager.STREAM_MUSIC,0);
+        this.mSoundPool = new SoundPool(10,AudioManager.STREAM_MUSIC,0);        
         this.mSound = mSoundPool.load(context, R.raw.gamemusic,1);
         this.mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         
         // Set volume and play sound
         this.mVolume = (float) mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        this.mStream = mSoundPool.play(mSound, mVolume, mVolume, 1, -1, 1f);
-        
         this.mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         this.mAccelerometer = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        
+        mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
+            public void onLoadComplete(SoundPool mSoundPool, int sampleId,
+                int status) {
+            	if(mSound != 0)
+            		mSoundPool.play(mSound, mVolume, mVolume, 1, -1, 0);
+            }
+          });
     }
 
     @Override
@@ -96,14 +103,14 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 	@Override
 	public void onPause() {
 		super.onPause();
-		mSoundPool.pause(mStream);
+		//mSoundPool.pause(mStream);
 		this.mSensorManager.unregisterListener(this);
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
-		mSoundPool.resume(mStream);
+		//mSoundPool.resume(mStream);
 		this.mSensorManager.registerListener(this, this.mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 		this.mGravity = null;
 	}	
