@@ -113,6 +113,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 		super.onPause();
 		//mSoundPool.pause(mStream);
 		this.mSensorManager.unregisterListener(this);
+		Scene.pause();
 	}
 	
 	@Override

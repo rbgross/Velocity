@@ -15,9 +15,9 @@ public class PlayerController extends Component {
 		float model[] = this.mTransform.getModel();
 		Matrix.translateM(model, 0, -GLES20InteractiveSurfaceView.tilt / 7, GLES20InteractiveSurfaceView.roll, 0);
 		
-		model[12] = Math.min(model[12], 10.0f); // Modify this to be the aspect ratio x 6
-		model[12] = Math.max(model[12], -10.0f); // Modify this to be the aspect ratio x 6
-		model[13] = Math.min(model[13], 6.0f);
-		model[13] = Math.max(model[13], -6.0f);
+		model[12] = Math.min(model[12], 6.5f); // Modify this to be the aspect ratio x 6
+		model[12] = Math.max(model[12], -6.5f); // Modify this to be the aspect ratio x 6
+		model[13] = Math.min(model[13], 3.9f);
+		model[13] = Math.max(model[13], -3.9f);
 	}
 }
