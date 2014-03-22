@@ -19,9 +19,7 @@ public class MainActivity extends Activity {
         
         // Request a full screen window with no title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Create a GLES20InteractiveSurfaceView instance and set it as the ContentView for this Activity
         this.mView = new GLES20InteractiveSurfaceView(this);

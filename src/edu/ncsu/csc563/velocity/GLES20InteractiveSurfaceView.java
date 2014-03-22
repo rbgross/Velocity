@@ -8,9 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.media.SoundPool.OnLoadCompleteListener;
+import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -20,13 +18,11 @@ import android.view.MotionEvent;
  * touch and accelerometer events
  */
 public class GLES20InteractiveSurfaceView extends GLSurfaceView implements SensorEventListener {
-	//private SoundPool mSoundPool;
 	private SensorManager mSensorManager;
-	//private AudioManager mAudioManager;
     private Sensor mAccelerometer;    
     private float[] mGravity;
-    //private int mSound = 0;
-    //private float mVolume;
+    
+    private MediaPlayer mp;
     
     private float baseRoll;
     private float baseTilt;
@@ -43,23 +39,13 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(new GLES20Renderer(context));
         
-        // Create a SoundPool and load sounds
-        //this.mSoundPool = new SoundPool(10,AudioManager.STREAM_MUSIC,0);        
-        //this.mSound = mSoundPool.load(context, R.raw.gamemusic,1);
-        //this.mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        
-        // Set volume and play sound
-        //this.mVolume = (float) mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         this.mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         this.mAccelerometer = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         
-        //mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
-            //public void onLoadComplete(SoundPool mSoundPool, int sampleId,
-                //int status) {
-            	//if(mSound != 0)
-            		//mSoundPool.play(mSound, mVolume, mVolume, 1, -1, 0);
-            //}
-          //});
+        /*
+         * DON'T USE SOUND POOL FOR BACKGROUND MUSIC IT LOADS THE WHOLE THING INTO RAM AND OVERFLOWS
+         */
+        mp = MediaPlayer.create(context, R.raw.nights);   
         
         Scene.pause();        
     }
@@ -70,11 +56,11 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         	case MotionEvent.ACTION_DOWN:
         		if (!Scene.isPaused()) {
             		Scene.pause();
-            		//mSoundPool.autoPause();
+                    mp.pause();
             	} else {
             		this.mGravity = null;
             		Scene.unPause();
-            		//mSoundPool.autoResume();
+            		mp.start();
             	}
         		break;
     	}  	
@@ -111,15 +97,15 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 	@Override
 	public void onPause() {
 		super.onPause();
-		//mSoundPool.pause(mStream);
+		
 		this.mSensorManager.unregisterListener(this);
 		Scene.pause();
+		mp.pause();
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
-		//mSoundPool.resume(mStream);
 		this.mSensorManager.registerListener(this, this.mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 		this.mGravity = null;
 	}	
