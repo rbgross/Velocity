@@ -45,7 +45,8 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         /*
          * DON'T USE SOUND POOL FOR BACKGROUND MUSIC IT LOADS THE WHOLE THING INTO RAM AND OVERFLOWS
          */
-        mp = MediaPlayer.create(context, R.raw.nights);   
+        mp = MediaPlayer.create(context, R.raw.nights);
+        mp.setLooping(true);
         
         Scene.pause();        
     }
