@@ -1,6 +1,5 @@
 package edu.ncsu.csc563.velocity.actors.components;
 
-import android.opengl.Matrix;
 import edu.ncsu.csc563.velocity.GLES20InteractiveSurfaceView;
 
 public class PlayerController extends Component {
@@ -13,7 +12,7 @@ public class PlayerController extends Component {
 	@Override
 	public void update() {
 		
-		this.mTransform.translate(-GLES20InteractiveSurfaceView.tilt * 1.25f / 7, GLES20InteractiveSurfaceView.roll * 1.25f, 0);
+		this.mTransform.translate(-GLES20InteractiveSurfaceView.tilt / 7, GLES20InteractiveSurfaceView.roll, 0);
 		float[] tempPos = this.mTransform.getPosition();
 		tempPos[0] = Math.min(tempPos[0], 6.5f);
 		tempPos[0] = Math.max(tempPos[0], -6.5f);

@@ -24,9 +24,6 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	/** Reference to the currently active shader */
 	private GLES20Shader mActiveShader;
 	
-	/** Reference to the game scene */
-	private Scene mScene;
-	
 	public GLES20Renderer(Context context) {
 		this.context = context;
 	}
@@ -77,8 +74,6 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		//Store the value for the light position on the graphics card
 		float lightPos[] = {1.0f, 1.0f, -1.0f, 0.0f};
 		this.mActiveShader.setUniform("lightPosition", lightPos);
-		
-		this.mScene = Scene.getInstance();
 	}
 	
 	@Override
@@ -98,9 +93,17 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		//your clipping plane specified in the projection matrix, so there's no need to set that
 		//value explicitly in most situations)	
 		
+		if (Scene.isGameOver()) {
+			//Set the default color of the background each time a new frame is drawn
+			GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		} else {
+			//Set the default color of the background each time a new frame is drawn
+			GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+		
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 		
-		this.mScene.updateScene();
-		this.mScene.drawScene();
+		Scene.getInstance().updateScene();
+		Scene.getInstance().drawScene();
 	}
 }

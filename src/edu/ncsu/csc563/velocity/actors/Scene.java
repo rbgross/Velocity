@@ -15,12 +15,13 @@ public class Scene {
 	private LinkedList<Actor> mActors;
 	public static Scene instance;
 	private static boolean paused = false;
+	private static boolean gameOver = false;
 	
 	private Scene() {		
 		this.mPlayer = ActorFactory.ship();
 		this.mActors = new LinkedList<Actor>();
 		
-		this.mActors.addAll(SegmentFactory.getRandomSegment(50));
+		this.mActors.addAll(SegmentFactory.getRandomSegment(0));
 		
 		//Check if the max depth is too high; if so, add a new segment
 		float zMax = ((Collider) this.mActors.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
@@ -35,6 +36,11 @@ public class Scene {
 			instance = new Scene();
 		}
 		return instance;
+	}
+	
+	public static void resetGame() {
+		gameOver = false;
+		instance = new Scene();
 	}
 	
 	public void updateScene() {
@@ -52,11 +58,9 @@ public class Scene {
 			while (colRange < 0.25f) {
 				if (Collision.collisionTest((Collider) this.mPlayer.getComponent("Collider"), (Collider) this.mActors.get(i).getComponent("Collider"))) {
 					collided = true;
-					((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0.5f, 0.0f);
-					Log.e("collision", "YOU COLLIDED!");
-				} else {
-					((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(0.3f, 0.3f, 0.3f);
+					break;
 				}
+				
 				i++;
 				if (i < this.mActors.size()) {
 					colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
@@ -66,7 +70,18 @@ public class Scene {
 			}
 			
 			if (collided) {
-				//paused = true;
+				paused = true;
+				gameOver = true;
+				
+				for (Actor actor : this.mActors) {
+					float[] tempCol = ((Material) actor.getComponent("Material")).getDiffuseColor();
+					tempCol[0] = 1 - tempCol[0];
+					tempCol[1] = 1 - tempCol[1];
+					tempCol[2] = 1 - tempCol[2];
+					((Material) actor.getComponent("Material")).setDiffuseColor(tempCol[0], tempCol[1], tempCol[2]);
+				}
+				
+				((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
 			}
 			
 			//Remove actors who's backs have moved past the camera
@@ -92,6 +107,10 @@ public class Scene {
 		for (Actor actor : this.mActors) {
 			actor.draw();
 		}
+	}
+	
+	public static boolean isGameOver() {
+		return gameOver;
 	}
 	
 	public static boolean isPaused() {

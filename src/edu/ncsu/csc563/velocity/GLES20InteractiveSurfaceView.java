@@ -45,8 +45,8 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         /*
          * DON'T USE SOUND POOL FOR BACKGROUND MUSIC IT LOADS THE WHOLE THING INTO RAM AND OVERFLOWS
          */
-        mp = MediaPlayer.create(context, R.raw.nights);
-        mp.setLooping(true);
+        this.mp = MediaPlayer.create(context, R.raw.nights);
+        this.mp.setLooping(true);
         
         Scene.pause();        
     }
@@ -55,14 +55,20 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
     public boolean onTouchEvent(MotionEvent e) {
     	switch (e.getAction()) {
         	case MotionEvent.ACTION_DOWN:
-        		if (!Scene.isPaused()) {
-            		Scene.pause();
-                    mp.pause();
-            	} else {
-            		this.mGravity = null;
-            		Scene.unPause();
-            		mp.start();
-            	}
+        		if (Scene.isGameOver()) {
+        			Scene.resetGame();
+        			this.mp.pause();
+        			this.mp.seekTo(0);
+        		} else {	        		
+	        		if (!Scene.isPaused()) {
+	            		Scene.pause();
+	                    this.mp.pause();
+	            	} else {
+	            		this.mGravity = null;
+	            		Scene.unPause();
+	            		this.mp.start();
+	            	}
+        		}
         		break;
     	}  	
     	
@@ -101,7 +107,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 		
 		this.mSensorManager.unregisterListener(this);
 		Scene.pause();
-		mp.pause();
+		this.mp.pause();
 	}
 	
 	@Override
