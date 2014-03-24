@@ -2,7 +2,6 @@ package edu.ncsu.csc563.velocity.physics;
 
 import edu.ncsu.csc563.velocity.actors.components.Collider;
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
-import edu.ncsu.csc563.velocity.actors.components.colliders.PlaneCollider;
 import edu.ncsu.csc563.velocity.actors.components.colliders.SphereCollider;
 
 public class Collision {
@@ -38,21 +37,55 @@ public class Collision {
 		
 		return false;
 	}
-
-	private static boolean collisionTest(PlaneCollider plane, OBBCollider obb) {
-		return false;		
+	
+	// This code is a java adaption of the Sphere-OBB collision code as found in Real Time Collision Detection
+	//by Christer Ericson
+	private static boolean collisionTest(OBBCollider obb, SphereCollider sphere) {
+		float[] obbCen = obb.getCenter();
+		float[] sphereCen = sphere.getCenter();
+		float[] obbRot = obb.getRotationMatrix();
+		float[] obbHW = obb.getHalfWidths();
+		float sphereRad = sphere.getRadius();
+		
+		float[] d = {sphereCen[0] - obbCen[0], sphereCen[1] - obbCen[1], sphereCen[2] - obbCen[2]};
+		float[] q = obb.getCenter();
+		
+		for (int i = 0; i < 3; i++) {
+			float dist = d[0] * obbRot[3 * i + 0] + d[1] * obbRot[3 * i + 1] + d[2] * obbRot[3 * i + 2];
+			if (dist > obbHW[i]) {
+				dist = obbHW[i];
+			}
+			if (dist < -obbHW[i]) {
+				dist = -obbHW[i];
+			}
+			q[0] += dist * obbRot[3 * i + 0];
+			q[1] += dist * obbRot[3 * i + 1];
+			q[2] += dist * obbRot[3 * i + 2];
+		}
+		
+		float[] v = new float[3];
+		v[0] = q[0] - sphereCen[0];
+		v[1] = q[1] - sphereCen[1];
+		v[2] = q[2] - sphereCen[2];
+		
+		return (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]) <= (sphereRad * sphereRad);
 	}
 	
-	private static boolean collisionTest(PlaneCollider plane1, PlaneCollider plane2) {
-		return false;
-	}
-	
-	private static boolean collisionTest(OBBCollider a, SphereCollider b) {
-		return false;
-	}
-	
+	// This code is a java adaption of the Sphere-Sphere collision code as found in Real Time Collision Detection
+	// by Christer Ericson
 	private static boolean collisionTest(SphereCollider a, SphereCollider b) {
-		return false;
+		float aRad = a.getRadius();
+		float bRad = b.getRadius();
+		float[] aCen = a.getCenter();
+		float[] bCen = b.getCenter();
+		
+		// Calculate squared distance between centers
+		float[] d = {aCen[0] - bCen[0], aCen[1] - bCen[1], aCen[2] - bCen[2]};
+		float dist2 = d[0] * d[0] + d[1] * d[1] + d[2] * d[2];
+		
+		// Spheres intersect if squared distance is less than squared sum of radii
+		float radiusSum = aRad + bRad;
+		return dist2 <= radiusSum * radiusSum;
 	}
 	
 	// This code is a java adaption of the OBB-OBB collision code as found in Real Time Collision Detection
