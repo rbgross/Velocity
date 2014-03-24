@@ -31,12 +31,6 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		String modelName;
-		modelName = "meshes/Nathan2/turd.vmf";
-		try {
-			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
-		} catch (IOException e) {
-			Log.e("MainActivity", "The file " + modelName + " could not be found.");
-		}
 		
 		modelName = "meshes/RoundedCube.vmf";
 		try {
@@ -46,6 +40,191 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		}
 		
 		modelName = "meshes/LongRoundedRectPrism.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		// Nathan's obstacles
+		modelName = "meshes/Nathan2/large_spike_ball.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/large_sqr_pyr.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/large_tri_pyr.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/lg_cube.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/lg_ell.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/lg_hplus.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/lg_plus.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/lg_step.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/long_hex_prism.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/long_rect_prism.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/rnd_cube_panel.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/rnd_hex_panel.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/rnd_tri_panel.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/short_hex_prism.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/short_rect_prism.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/sm_cube.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/sm_ell.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/sm_hplus.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/sm_plus.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/sm_step.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/small_spike_ball.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/small_sqr_pyr.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/small_tri_pyr.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		// Ships
+		modelName = "meshes/Nathan2/turd.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		modelName = "meshes/Nathan2/the_enterprezze.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
+		// Token
+		modelName = "meshes/Nathan2/token.vmf";
 		try {
 			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
 		} catch (IOException e) {
