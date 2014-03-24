@@ -80,6 +80,7 @@ public class Transform extends Component{
 		this.mScale[0] = x;
 		this.mScale[1] = y;
 		this.mScale[2] = z;
+		this.mChanged = true;
 	}
 	
 	public float[] getModel() {

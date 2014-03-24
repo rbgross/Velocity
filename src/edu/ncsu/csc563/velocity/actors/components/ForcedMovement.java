@@ -2,7 +2,7 @@ package edu.ncsu.csc563.velocity.actors.components;
 
 public class ForcedMovement extends Component {
 	private Transform mTransform;
-	public static float mSpeed = 0.3f;
+	public static float mSpeed = 0.1f;
 
 	public ForcedMovement(Transform transform) {
 		this.mTransform = transform;

@@ -11,7 +11,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import edu.ncsu.csc563.velocity.actors.ActorFactory;
 import edu.ncsu.csc563.velocity.actors.Scene;
 import edu.ncsu.csc563.velocity.resources.ResourceManager;
 
@@ -42,13 +41,6 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 			Log.e("MainActivity", "The file " + modelName + " could not be found.");
 		}
 		
-		modelName = "meshes/Sphere.vmf";
-		try {
-			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
-		} catch (IOException e) {
-			Log.e("MainActivity", "The file " + modelName + " could not be found.");
-		}
-		
 		modelName = "meshes/RoundedCube.vmf";
 		try {
 			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
@@ -61,15 +53,6 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
 		} catch (IOException e) {
 			Log.e("MainActivity", "The file " + modelName + " could not be found.");
-		}
-		
-		for (int i = 0; i < ActorFactory.randomMeshes.length; i++) {
-			modelName = ActorFactory.randomMeshes[i];
-			try {
-				ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
-			} catch (IOException e) {
-				Log.e("MainActivity", "The file " + modelName + " could not be found.");
-			}
 		}
 		
 		GLES20ShaderFactory.diffuseSpecular();

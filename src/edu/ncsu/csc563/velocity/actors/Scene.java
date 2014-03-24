@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import android.util.Log;
 
+import edu.ncsu.csc563.velocity.actors.components.Collider;
 import edu.ncsu.csc563.velocity.actors.components.ForcedMovement;
 import edu.ncsu.csc563.velocity.actors.components.Material;
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
@@ -20,6 +21,13 @@ public class Scene {
 		this.mActors = new LinkedList<Actor>();
 		
 		this.mActors.addAll(SegmentFactory.getRandomSegment(50));
+		
+		//Check if the max depth is too high; if so, add a new segment
+		float zMax = ((Collider) this.mActors.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
+		while (zMax < 200) {
+			this.mActors.addAll(SegmentFactory.getRandomSegment(zMax));
+			zMax = ((Collider) this.mActors.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
+		}	
 	}
 	
 	public static Scene getInstance() {
@@ -39,10 +47,10 @@ public class Scene {
 			
 			//Test obstacle ship collisions
 			int i = 0;
-			float colRange = ((OBBCollider) this.mActors.get(i).getComponent("OBBCollider")).getZBounds()[0];
+			float colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
 			boolean collided = false;
 			while (colRange < 0.25f) {
-				if (Collision.collisionTest((OBBCollider) this.mPlayer.getComponent("OBBCollider"), (OBBCollider) this.mActors.get(i).getComponent("OBBCollider"))) {
+				if (Collision.collisionTest((Collider) this.mPlayer.getComponent("Collider"), (Collider) this.mActors.get(i).getComponent("Collider"))) {
 					collided = true;
 					((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0.5f, 0.0f);
 					Log.e("collision", "YOU COLLIDED!");
@@ -50,7 +58,11 @@ public class Scene {
 					((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(0.3f, 0.3f, 0.3f);
 				}
 				i++;
-				colRange = ((OBBCollider) this.mActors.get(i).getComponent("OBBCollider")).getZBounds()[0];
+				if (i < this.mActors.size()) {
+					colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
+				} else {
+					break;
+				}
 			}
 			
 			if (collided) {
@@ -58,14 +70,14 @@ public class Scene {
 			}
 			
 			//Remove actors who's backs have moved past the camera
-			float zMin = ((OBBCollider) this.mActors.getFirst().getComponent("OBBCollider")).getZBounds()[1];
+			float zMin = ((Collider) this.mActors.getFirst().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
 			while (zMin < -15 ) {
 				this.mActors.remove();
-				zMin = ((OBBCollider) this.mActors.getFirst().getComponent("OBBCollider")).getZBounds()[1];
+				zMin = ((Collider) this.mActors.getFirst().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
 			}
 			
 			//Check if the max depth is too high; if so, add a new segment
-			float zMax = ((OBBCollider) this.mActors.getLast().getComponent("OBBCollider")).getZBounds()[1];
+			float zMax = ((Collider) this.mActors.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
 			if (zMax < 200) {
 				this.mActors.addAll(SegmentFactory.getRandomSegment(zMax));
 			}	

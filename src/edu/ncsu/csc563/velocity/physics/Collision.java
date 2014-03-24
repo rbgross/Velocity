@@ -1,21 +1,63 @@
 package edu.ncsu.csc563.velocity.physics;
 
+import edu.ncsu.csc563.velocity.actors.components.Collider;
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
 import edu.ncsu.csc563.velocity.actors.components.colliders.PlaneCollider;
+import edu.ncsu.csc563.velocity.actors.components.colliders.SphereCollider;
 
 public class Collision {
+	
+	public static boolean collisionTest(Collider c1, Collider c2) {
+		for (OBBCollider obb1 : c1.getOBBColliders()) {
+			for (OBBCollider obb2 : c2.getOBBColliders()) {
+				if (collisionTest(obb1, obb2)) {
+					return true;
+				}
+			}
+			
+			for (SphereCollider sphere2 : c2.getSphereColliders()) {
+				if (collisionTest(obb1, sphere2)) {
+					return true;
+				}
+			}
+		}
+		
+		for (SphereCollider sphere1 : c1.getSphereColliders()) {
+			for (OBBCollider obb2 : c2.getOBBColliders()) {
+				if (collisionTest(obb2, sphere1)) {
+					return true;
+				}
+			}
+			
+			for (SphereCollider sphere2 : c2.getSphereColliders()) {
+				if (collisionTest(sphere1, sphere2)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 
-	public static boolean collisionTest(PlaneCollider plane, OBBCollider obb) {
+	private static boolean collisionTest(PlaneCollider plane, OBBCollider obb) {
 		return false;		
 	}
 	
-	public static boolean collisionTest(PlaneCollider plane1, PlaneCollider plane2) {
+	private static boolean collisionTest(PlaneCollider plane1, PlaneCollider plane2) {
+		return false;
+	}
+	
+	private static boolean collisionTest(OBBCollider a, SphereCollider b) {
+		return false;
+	}
+	
+	private static boolean collisionTest(SphereCollider a, SphereCollider b) {
 		return false;
 	}
 	
 	// This code is a java adaption of the OBB-OBB collision code as found in Real Time Collision Detection
 	// by Christer Ericson
-	public static boolean collisionTest(OBBCollider a, OBBCollider b) {
+	private static boolean collisionTest(OBBCollider a, OBBCollider b) {
 		float[] aHW = a.getHalfWidths();
 		float[] bHW = b.getHalfWidths();
 		float[] aRot = a.getRotationMatrix();
@@ -28,6 +70,7 @@ public class Collision {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				R[3 * i + j] = aRot[3 * i + 0] * bRot[3 * j + 0] + aRot[3 * i + 1] * bRot[3 * j + 1] + aRot[3 * i + 2] * bRot[3 * j + 2];
+				//R[3 * j + i] = aRot[3 * i + 0] * bRot[3 * j + 0] + aRot[3 * i + 1] * bRot[3 * j + 1] + aRot[3 * i + 2] * bRot[3 * j + 2];
 			}
 		}
 		
@@ -42,6 +85,11 @@ public class Collision {
 		tempT[0] = t[0] * aRot[0] + t[1] * aRot[1] + t[2] * aRot[2];
 		tempT[1] = t[0] * aRot[3] + t[1] * aRot[4] + t[2] * aRot[5];
 		tempT[2] = t[0] * aRot[6] + t[1] * aRot[7] + t[2] * aRot[8];
+		
+		//tempT[0] = t[0] * aRot[0] + t[1] * aRot[3] + t[2] * aRot[6];
+		//tempT[1] = t[0] * aRot[1] + t[1] * aRot[4] + t[2] * aRot[7];
+		//tempT[2] = t[0] * aRot[2] + t[1] * aRot[5] + t[2] * aRot[8];
+		
 		t = tempT;
 		
 		// Compute common subexpressions.  Add in an epsilon term to

@@ -3,27 +3,28 @@ package edu.ncsu.csc563.velocity.actors;
 import java.util.ArrayList;
 import java.util.Random;
 
-import edu.ncsu.csc563.velocity.actors.components.Material;
 import edu.ncsu.csc563.velocity.actors.components.Transform;
 
 
 public class SegmentFactory {
+	//public static final int NUM_SEGMENTS = 1;
 	public static final int NUM_SEGMENTS = 4;
 	
 	public static ArrayList<Actor> getRandomSegment(float zDepth) {
 		int rand = new Random().nextInt(NUM_SEGMENTS);
 		switch (rand) {
 			case 0:
-				return pillarSegment().getActors(zDepth + 0);
+				return pillarSegment().getActors(zDepth + 20);
 			
 			case 1:
-				return rotatedPillarSegment().getActors(zDepth + 0);
-				
+			//case 0:
+				return rotatedPillarSegment().getActors(zDepth + 20);
+			
 			case 2:
-				return needleSegment().getActors(zDepth + 0);
+				return needleSegment().getActors(zDepth + 20);
 				
 			case 3:
-				return scatteredCubeSegment().getActors(zDepth + 0);
+				return scatteredCubeSegment().getActors(zDepth + 20);
 				
 			default:
 				return null;
@@ -31,7 +32,7 @@ public class SegmentFactory {
 	}
 	
 	public static Segment pillarSegment() {	
-		Segment segment = new Segment(10);
+		Segment segment = new Segment(0);
 		Actor actor;
 		
 		actor = ActorFactory.rectPrism();
@@ -108,7 +109,7 @@ public class SegmentFactory {
 	}
 	
 	public static Segment needleSegment() {	
-		Segment segment = new Segment(10);
+		Segment segment = new Segment(0);
 		Actor actor;
 		
 		actor = ActorFactory.rectPrism();
@@ -135,7 +136,7 @@ public class SegmentFactory {
 	}
 	
 	public static Segment scatteredCubeSegment() {	
-		Segment segment = new Segment(10);
+		Segment segment = new Segment(0);
 		Actor actor;
 		
 		actor = ActorFactory.cube();
@@ -161,42 +162,9 @@ public class SegmentFactory {
 		
 		return segment;
 	}
-	
-	public static Segment randomCubeSegment() {	
-		Segment segment = new Segment(10);
-		Actor actor;
-		
-		Random rand = new Random();
-		
-		for (int i = 0; i < 20; i++) {		
-			actor = ActorFactory.cube();
-			((Transform) actor.getComponent("Transform")).setPosition(rand.nextFloat() * -20 + 10, rand.nextFloat() * -20 + 10, rand.nextFloat() * -20 + 10);
-			((Transform) actor.getComponent("Transform")).setRotation(rand.nextFloat() * 360, rand.nextFloat() * 360, rand.nextFloat() * 360);
-			((Material) actor.getComponent("Material")).setDiffuseColor(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
-			segment.addActor(actor);
-		}
-		
-		return segment;
-	}
-	
-	public static Segment randomNeedleSegment() {	
-		Segment segment = new Segment(10);
-		Actor actor;
-		
-		Random rand = new Random();
-		
-		for (int i = 0; i < 20; i++) {					
-			actor = ActorFactory.rectPrism();
-			((Transform) actor.getComponent("Transform")).setPosition(rand.nextFloat() * -20 + 10, rand.nextFloat() * -20 + 10, rand.nextFloat() * -20 + 10);
-			((Material) actor.getComponent("Material")).setDiffuseColor(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
-			segment.addActor(actor);
-		}
-		
-		return segment;
-	}
-	
+
 	public static Segment rotatedPillarSegment() {	
-		Segment segment = new Segment(10);
+		Segment segment = new Segment(0);
 		Actor actor;
 		
 		actor = ActorFactory.rectPrism();
@@ -215,23 +183,6 @@ public class SegmentFactory {
 		((Transform) actor.getComponent("Transform")).setPosition(0, 0, 4);
 		((Transform) actor.getComponent("Transform")).setRotation(90, 120, 0);
 		segment.addActor(actor);
-		
-		return segment;
-	}
-	
-	public static Segment randomObjectSegment() {	
-		Segment segment = new Segment(10);
-		Actor actor;
-		
-		Random rand = new Random();
-		
-		for (int i = 0; i < 3; i++) {		
-			actor = ActorFactory.randomObject();
-			((Transform) actor.getComponent("Transform")).setPosition(rand.nextFloat() * -20 + 10, rand.nextFloat() * -20 + 10, rand.nextFloat() * -20 + 10);
-			((Transform) actor.getComponent("Transform")).setRotation(rand.nextFloat() * 360, rand.nextFloat() * 360, rand.nextFloat() * 360);
-			((Material) actor.getComponent("Material")).setDiffuseColor(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
-			segment.addActor(actor);
-		}
 		
 		return segment;
 	}

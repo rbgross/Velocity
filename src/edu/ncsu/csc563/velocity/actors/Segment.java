@@ -3,6 +3,7 @@ package edu.ncsu.csc563.velocity.actors;
 import java.util.ArrayList;
 
 import edu.ncsu.csc563.velocity.actors.components.Transform;
+import edu.ncsu.csc563.velocity.actors.components.Collider;
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
 
 public class Segment {
@@ -21,7 +22,7 @@ public class Segment {
 	}
 	
 	public void addActor(Actor actor) {
-		float[] zBounds = ((OBBCollider) actor.getComponent("OBBCollider")).getZBounds();
+		float[] zBounds = ((Collider) actor.getComponent("Collider")).getPrimaryCollider().getZBounds();
 		if (zBounds[0] < this.zMin) {
 			this.zMin = zBounds[0];
 		}
