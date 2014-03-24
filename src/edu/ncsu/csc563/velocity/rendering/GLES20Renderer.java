@@ -32,6 +32,13 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		String modelName;
 		
+		modelName = "meshes/AdorbsShip.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
 		modelName = "meshes/Sphere.vmf";
 		try {
 			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
@@ -281,7 +288,7 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		
 		if (Scene.isGameOver()) {
 			//Set the default color of the background each time a new frame is drawn
-			GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		} else {
 			//Set the default color of the background each time a new frame is drawn
 			GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);

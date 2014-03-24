@@ -2,6 +2,7 @@ package edu.ncsu.csc563.velocity.actors;
 
 import edu.ncsu.csc563.velocity.actors.components.*;
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
+import edu.ncsu.csc563.velocity.actors.components.colliders.SphereCollider;
 import edu.ncsu.csc563.velocity.rendering.GLES20ShaderFactory;
 import edu.ncsu.csc563.velocity.resources.ResourceManager;
 
@@ -9,18 +10,38 @@ public class ActorFactory {
 	public static Actor ship() {
 		Actor actor = new Actor();
 		actor.addComponent("Transform", new Transform());
-		((Transform) actor.getComponent("Transform")).rotate(0, 90, 0);
-		//((Transform) actor.getComponent("Transform")).setScale(0.5f, 0.5f, 0.5f);
-		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/RoundedCube.vmf"));
+		((Transform) actor.getComponent("Transform")).setPosition(0, 0, -2);
+		((Transform) actor.getComponent("Transform")).rotate(0, 180, 0);
+		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/AdorbsShip.vmf"));
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
-		((Material) actor.getComponent("Material")).setDiffuseColor(0.0f, 0.5f, 1.0f);
+		((Material) actor.getComponent("Material")).setDiffuseColor(0.5f, 1.0f, 0.0f);
 		actor.addComponent("Controller", new PlayerController(((Transform) actor.getComponent("Transform"))));
 		actor.addComponent("Collider", new Collider());
 		float[] center = {0, 0, 0};
 		float[] halfWidths = {0.5f, 0.5f, 0.5f};
+		float radius = 0.5f;
 		OBBCollider collider = new OBBCollider((Transform) actor.getComponent("Transform"), center, halfWidths);
+		SphereCollider sCollider = new SphereCollider((Transform) actor.getComponent("Transform"), center, radius);
 		((Collider) actor.getComponent("Collider")).setPrimaryCollider(collider);
-		((Collider) actor.getComponent("Collider")).addOBBCollider(collider);
+		((Collider) actor.getComponent("Collider")).addSphereCollider(sCollider);
+		return actor;
+	}
+	
+	public static Actor sphere() {
+		Actor actor = new Actor();
+		actor.addComponent("Transform", new Transform());
+		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/Sphere.vmf"));
+		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
+		((Material) actor.getComponent("Material")).setDiffuseColor(0.3f, 0.3f, 0.3f);
+		actor.addComponent("Collider", new Collider());
+		float[] center = {0, 0, 0};
+		float radius = 0.5f;
+		float[] halfWidths = {0.5f, 0.5f, 0.5f};
+		OBBCollider obbCollider = new OBBCollider((Transform) actor.getComponent("Transform"), center, halfWidths);
+		SphereCollider sphereCollider = new SphereCollider((Transform) actor.getComponent("Transform"), center, radius);
+		((Collider) actor.getComponent("Collider")).setPrimaryCollider(obbCollider);
+		((Collider) actor.getComponent("Collider")).addSphereCollider(sphereCollider);
+		actor.addComponent("ForcedMovement", new ForcedMovement((Transform) actor.getComponent("Transform")));
 		return actor;
 	}
 	
@@ -319,7 +340,7 @@ public class ActorFactory {
 			// Create any collider this way (this is an example for OBB Collider)
 			// A SphereCollider uses the transform, center, and radius as default arguments
 			float[] center = {0, 0, 0};
-			float[] halfWidths = {1.5f, 0.75f, 0.125f};
+			float[] halfWidths = {1.5f, 0.125f, 0.75f};
 			OBBCollider collider = new OBBCollider((Transform) actor.getComponent("Transform"), center, halfWidths);
 			
 			// Add created colliders to the Collider container, 1 for the large primary collider and then as many as you need
@@ -508,7 +529,6 @@ public class ActorFactory {
 			// Add created colliders to the Collider container, 1 for the large primary collider and then as many as you need
 			// as sub colliders, added either to the OBBCollider or SphereCollider lists
 			((Collider) actor.getComponent("Collider")).setPrimaryCollider(collider);
-			((Collider) actor.getComponent("Collider")).addOBBCollider(collider);
 			
 			float[] center1 = {0, 0, 0};
 			float[] halfWidths1 = {0.166665f, 0.166665f, 0.166665f};

@@ -37,6 +37,7 @@ public class Scene {
 	
 	public static void resetGame() {
 		gameOver = false;
+		ForcedMovement.mSpeed = 0.2f;
 		instance = new Scene();
 	}
 	
@@ -52,7 +53,7 @@ public class Scene {
 			int i = 0;
 			float colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
 			boolean collided = false;
-			while (colRange < 0.25f) {
+			while (colRange < -1.5f) {
 				if (Collision.collisionTest((Collider) this.mPlayer.getComponent("Collider"), (Collider) this.mActors.get(i).getComponent("Collider"))) {
 					collided = true;
 					break;
@@ -71,14 +72,16 @@ public class Scene {
 				gameOver = true;
 				
 				for (Actor actor : this.mActors) {
-					float[] tempCol = ((Material) actor.getComponent("Material")).getDiffuseColor();
-					tempCol[0] = 1 - tempCol[0];
-					tempCol[1] = 1 - tempCol[1];
-					tempCol[2] = 1 - tempCol[2];
-					((Material) actor.getComponent("Material")).setDiffuseColor(tempCol[0], tempCol[1], tempCol[2]);
+					//float[] tempCol = ((Material) actor.getComponent("Material")).getDiffuseColor();
+					//tempCol[0] = 1 - tempCol[0];
+					//tempCol[1] = 1 - tempCol[1];
+					//tempCol[2] = 1 - tempCol[2];
+					//((Material) actor.getComponent("Material")).setDiffuseColor(tempCol[0], tempCol[1], tempCol[2]);
+					((Material) actor.getComponent("Material")).setDiffuseColor(1, 1, 1);
 				}
 				
-				((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
+				//((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
+				//((Material) this.mPlayer.getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
 			}
 			
 			//Remove actors who's backs have moved past the camera
