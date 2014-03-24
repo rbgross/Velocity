@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import edu.ncsu.csc563.velocity.actors.components.Transform;
 import edu.ncsu.csc563.velocity.actors.components.Collider;
-import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
 
 public class Segment {
 	private ArrayList<Actor> mActors;

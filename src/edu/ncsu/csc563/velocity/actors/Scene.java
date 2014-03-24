@@ -2,12 +2,9 @@ package edu.ncsu.csc563.velocity.actors;
 
 import java.util.LinkedList;
 
-import android.util.Log;
-
 import edu.ncsu.csc563.velocity.actors.components.Collider;
 import edu.ncsu.csc563.velocity.actors.components.ForcedMovement;
 import edu.ncsu.csc563.velocity.actors.components.Material;
-import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
 import edu.ncsu.csc563.velocity.physics.Collision;
 
 public class Scene {
@@ -69,9 +66,7 @@ public class Scene {
 				}
 			}
 			
-			if (collided) {
-				
-				/*
+			if (collided) {				
 				paused = true;
 				gameOver = true;
 				
@@ -82,7 +77,6 @@ public class Scene {
 					tempCol[2] = 1 - tempCol[2];
 					((Material) actor.getComponent("Material")).setDiffuseColor(tempCol[0], tempCol[1], tempCol[2]);
 				}
-				*/
 				
 				((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
 			}
