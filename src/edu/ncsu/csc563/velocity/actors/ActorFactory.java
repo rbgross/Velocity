@@ -16,8 +16,9 @@ public class ActorFactory {
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.0f, 0.5f, 1.0f);
 		actor.addComponent("Controller", new PlayerController(((Transform) actor.getComponent("Transform"))));
 		actor.addComponent("Collider", new Collider());
+		float[] center = {0, 0, 0};
 		float[] halfWidths = {0.5f, 0.5f, 0.5f};
-		OBBCollider collider = new OBBCollider((Transform) actor.getComponent("Transform"), halfWidths);
+		OBBCollider collider = new OBBCollider((Transform) actor.getComponent("Transform"), center, halfWidths);
 		((Collider) actor.getComponent("Collider")).setPrimaryCollider(collider);
 		((Collider) actor.getComponent("Collider")).addOBBCollider(collider);
 		return actor;
@@ -30,8 +31,9 @@ public class ActorFactory {
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.3f, 0.3f, 0.3f);
 		actor.addComponent("Collider", new Collider());
+		float[] center = {0, 0, 0};
 		float[] halfWidths = {0.5f, 0.5f, 0.5f};
-		OBBCollider collider = new OBBCollider((Transform) actor.getComponent("Transform"), halfWidths);
+		OBBCollider collider = new OBBCollider((Transform) actor.getComponent("Transform"), center, halfWidths);
 		((Collider) actor.getComponent("Collider")).setPrimaryCollider(collider);
 		((Collider) actor.getComponent("Collider")).addOBBCollider(collider);
 		actor.addComponent("ForcedMovement", new ForcedMovement((Transform) actor.getComponent("Transform")));
@@ -39,17 +41,37 @@ public class ActorFactory {
 	}
 	
 	public static Actor rectPrism() {
+		// Make a new actor
 		Actor actor = new Actor();
+		
+		// Add a transform; the center of this is the center of the primary (big) collider as well
 		actor.addComponent("Transform", new Transform());
+		
+		// Add the appropriate mesh from the file (add these to the assets/meshes/Nathan2 folder)
 		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/LongRoundedRectPrism.vmf"));
+		
+		// Add a material to the actor and set the diffuse color
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.3f, 0.3f, 0.3f);
-		actor.addComponent("Collider", new Collider());
-		float[] halfWidths = {0.5f, 0.5f, 4.0f};
-		OBBCollider collider = new OBBCollider((Transform) actor.getComponent("Transform"), halfWidths);
-		((Collider) actor.getComponent("Collider")).setPrimaryCollider(collider);
-		((Collider) actor.getComponent("Collider")).addOBBCollider(collider);		
-		actor.addComponent("OBBCollider", new OBBCollider((Transform) actor.getComponent("Transform"), halfWidths));
+		
+		// COLLIDERS
+		{
+			// Add a collider container to the actor, to hold the primary and composite colliders
+			actor.addComponent("Collider", new Collider());
+			
+			// Create any collider this way (this is an example for OBB Collider)
+			// A SphereCollider uses the transform, center, and radius as default arguments
+			float[] center = {0, 0, 0};
+			float[] halfWidths = {0.5f, 0.5f, 4.0f};
+			OBBCollider collider = new OBBCollider((Transform) actor.getComponent("Transform"), center, halfWidths);
+			
+			// Add created colliders to the Collider container, 1 for the large primary collider and then as many as you need
+			// as sub colliders, added either to the OBBCollider or SphereCollider lists
+			((Collider) actor.getComponent("Collider")).setPrimaryCollider(collider);
+			((Collider) actor.getComponent("Collider")).addOBBCollider(collider);		
+		}
+		
+		// For obstacles, add the forced movement that makes them accelerate towards the screen
 		actor.addComponent("ForcedMovement", new ForcedMovement((Transform) actor.getComponent("Transform")));
 		return actor;
 	}

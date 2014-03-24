@@ -7,7 +7,6 @@ import edu.ncsu.csc563.velocity.actors.components.Transform;
 
 
 public class SegmentFactory {
-	//public static final int NUM_SEGMENTS = 1;
 	public static final int NUM_SEGMENTS = 4;
 	
 	public static ArrayList<Actor> getRandomSegment(float zDepth) {
@@ -15,9 +14,7 @@ public class SegmentFactory {
 		switch (rand) {
 			case 0:
 				return pillarSegment().getActors(zDepth + 20);
-			
 			case 1:
-			//case 0:
 				return rotatedPillarSegment().getActors(zDepth + 20);
 			
 			case 2:

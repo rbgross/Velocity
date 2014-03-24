@@ -70,6 +70,8 @@ public class Scene {
 			}
 			
 			if (collided) {
+				
+				/*
 				paused = true;
 				gameOver = true;
 				
@@ -80,6 +82,7 @@ public class Scene {
 					tempCol[2] = 1 - tempCol[2];
 					((Material) actor.getComponent("Material")).setDiffuseColor(tempCol[0], tempCol[1], tempCol[2]);
 				}
+				*/
 				
 				((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
 			}
