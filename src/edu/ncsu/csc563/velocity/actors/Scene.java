@@ -2,7 +2,12 @@ package edu.ncsu.csc563.velocity.actors;
 
 import java.util.LinkedList;
 
+import android.util.Log;
+
+import edu.ncsu.csc563.velocity.actors.components.ForcedMovement;
+import edu.ncsu.csc563.velocity.actors.components.Material;
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
+import edu.ncsu.csc563.velocity.physics.Collision;
 
 public class Scene {
 	private Actor mPlayer;
@@ -14,7 +19,7 @@ public class Scene {
 		this.mPlayer = ActorFactory.ship();
 		this.mActors = new LinkedList<Actor>();
 		
-		this.mActors.addAll(SegmentFactory.getRandomSegment(200));
+		this.mActors.addAll(SegmentFactory.getRandomSegment(50));
 	}
 	
 	public static Scene getInstance() {
@@ -32,6 +37,26 @@ public class Scene {
 				actor.update();
 			}
 			
+			//Test obstacle ship collisions
+			int i = 0;
+			float colRange = ((OBBCollider) this.mActors.get(i).getComponent("OBBCollider")).getZBounds()[0];
+			boolean collided = false;
+			while (colRange < 0.25f) {
+				if (Collision.collisionTest((OBBCollider) this.mPlayer.getComponent("OBBCollider"), (OBBCollider) this.mActors.get(i).getComponent("OBBCollider"))) {
+					collided = true;
+					((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0.5f, 0.0f);
+					Log.e("collision", "YOU COLLIDED!");
+				} else {
+					((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(0.3f, 0.3f, 0.3f);
+				}
+				i++;
+				colRange = ((OBBCollider) this.mActors.get(i).getComponent("OBBCollider")).getZBounds()[0];
+			}
+			
+			if (collided) {
+				//paused = true;
+			}
+			
 			//Remove actors who's backs have moved past the camera
 			float zMin = ((OBBCollider) this.mActors.getFirst().getComponent("OBBCollider")).getZBounds()[1];
 			while (zMin < -15 ) {
@@ -44,7 +69,9 @@ public class Scene {
 			if (zMax < 200) {
 				this.mActors.addAll(SegmentFactory.getRandomSegment(zMax));
 			}	
-		}	
+			
+			ForcedMovement.mSpeed += 0.0001f;
+		}
 	}
 	
 	public void drawScene() {

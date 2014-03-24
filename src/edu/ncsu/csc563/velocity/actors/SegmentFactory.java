@@ -8,19 +8,22 @@ import edu.ncsu.csc563.velocity.actors.components.Transform;
 
 
 public class SegmentFactory {
-	public static final int NUM_SEGMENTS = 3;
+	public static final int NUM_SEGMENTS = 4;
 	
 	public static ArrayList<Actor> getRandomSegment(float zDepth) {
 		int rand = new Random().nextInt(NUM_SEGMENTS);
 		switch (rand) {
 			case 0:
-				return pillarSegment().getActors(zDepth + 50);
+				return pillarSegment().getActors(zDepth + 0);
 			
 			case 1:
-				return rotatedPillarSegment().getActors(zDepth + 50);
+				return rotatedPillarSegment().getActors(zDepth + 0);
 				
 			case 2:
-				return randomObjectSegment().getActors(zDepth);
+				return needleSegment().getActors(zDepth + 0);
+				
+			case 3:
+				return scatteredCubeSegment().getActors(zDepth + 0);
 				
 			default:
 				return null;

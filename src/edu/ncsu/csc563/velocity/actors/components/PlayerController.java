@@ -12,12 +12,13 @@ public class PlayerController extends Component {
 	
 	@Override
 	public void update() {
-		float model[] = this.mTransform.getModel();
-		Matrix.translateM(model, 0, -GLES20InteractiveSurfaceView.tilt / 7, GLES20InteractiveSurfaceView.roll, 0);
 		
-		model[12] = Math.min(model[12], 6.5f); // Modify this to be the aspect ratio x 6
-		model[12] = Math.max(model[12], -6.5f); // Modify this to be the aspect ratio x 6
-		model[13] = Math.min(model[13], 3.9f);
-		model[13] = Math.max(model[13], -3.9f);
+		this.mTransform.translate(-GLES20InteractiveSurfaceView.tilt * 1.25f / 7, GLES20InteractiveSurfaceView.roll * 1.25f, 0);
+		float[] tempPos = this.mTransform.getPosition();
+		tempPos[0] = Math.min(tempPos[0], 6.5f);
+		tempPos[0] = Math.max(tempPos[0], -6.5f);
+		tempPos[1] = Math.min(tempPos[1], 3.9f);
+		tempPos[1] = Math.max(tempPos[1], -3.9f);
+		this.mTransform.setPosition(tempPos[0], tempPos[1], tempPos[2]);
 	}
 }

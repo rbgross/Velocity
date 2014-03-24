@@ -34,10 +34,14 @@ public class ActorFactory {
 	public static Actor ship() {
 		Actor actor = new Actor();
 		actor.addComponent("Transform", new Transform());
+		((Transform) actor.getComponent("Transform")).rotate(0, 90, 0);
+		//((Transform) actor.getComponent("Transform")).setScale(0.5f, 0.5f, 0.5f);
 		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/RoundedCube.vmf"));
 		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.0f, 0.5f, 1.0f);
 		actor.addComponent("Controller", new PlayerController(((Transform) actor.getComponent("Transform"))));
+		float[] halfWidths = {0.5f, 0.5f, 0.5f};
+		actor.addComponent("OBBCollider", new OBBCollider((Transform) actor.getComponent("Transform"), halfWidths));
 		return actor;
 	}
 	

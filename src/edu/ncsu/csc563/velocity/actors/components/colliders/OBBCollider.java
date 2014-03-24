@@ -36,4 +36,26 @@ public class OBBCollider extends Component {
 		}
 		return zBounds;
 	}
+	
+	public float[] getHalfWidths() {
+		return this.mHalfWidths;
+	}
+	
+	public float[] getRotationMatrix() {
+		float[] r = new float[9];
+		r[0] = this.mTransform.getModel()[0];
+		r[1] = this.mTransform.getModel()[4];
+		r[2] = this.mTransform.getModel()[8];
+		r[3] = this.mTransform.getModel()[1];
+		r[4] = this.mTransform.getModel()[5];
+		r[5] = this.mTransform.getModel()[9];
+		r[6] = this.mTransform.getModel()[2];
+		r[7] = this.mTransform.getModel()[6];
+		r[8] = this.mTransform.getModel()[10];
+		return r; 
+	}
+	
+	public float[] getCenter() {
+		return this.mTransform.getPosition();
+	}
 }

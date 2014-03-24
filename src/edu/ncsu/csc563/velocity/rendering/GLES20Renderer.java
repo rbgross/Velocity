@@ -35,6 +35,13 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		String modelName;
+		modelName = "meshes/Nathan2/turd.vmf";
+		try {
+			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
+		} catch (IOException e) {
+			Log.e("MainActivity", "The file " + modelName + " could not be found.");
+		}
+		
 		modelName = "meshes/Sphere.vmf";
 		try {
 			ResourceManager.loadMesh(modelName, this.context.getAssets().open(modelName));
