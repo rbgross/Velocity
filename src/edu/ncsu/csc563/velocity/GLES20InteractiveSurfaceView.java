@@ -8,7 +8,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -25,6 +27,8 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
     
     private float baseRoll;
     private float baseTilt;
+	public SoundPool sp;
+	public int endSound;
     
     public static float roll;
     public static float tilt;
@@ -41,9 +45,9 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         this.mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         this.mAccelerometer = this.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         
-        /*
-         * DON'T USE SOUND POOL FOR BACKGROUND MUSIC IT LOADS THE WHOLE THING INTO RAM AND OVERFLOWS
-         */
+        sp = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        endSound = sp.load(context, R.raw.turrible, 1);
+        
         this.mp = MediaPlayer.create(context, R.raw.nights);
         this.mp.setLooping(true);
         
@@ -58,6 +62,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         			Scene.resetGame();
         			this.mp.pause();
         			this.mp.seekTo(0);
+        			sp.play(endSound, 1, 1, 0, 0, 1);
         		} else {	        		
 	        		if (!Scene.isPaused()) {
 	            		Scene.pause();
@@ -80,7 +85,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
 		this.handleAccelerometer(event);				
 	}
 	
-	private void handleAccelerometer(SensorEvent event) {		
+	private void handleAccelerometer(SensorEvent event) {
 		if (this.mGravity != null) {			
 			roll = (float) Math.atan2(event.values[2], event.values[0]) - this.baseRoll;
 			tilt = event.values[1] - this.baseTilt;
