@@ -3,44 +3,70 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:padding="5dp" >
+    android:padding="5dp"
+    android:background="@drawable/scorebg" >
 <LinearLayout
-    android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical|left" >
+        <TextView
+            android:text="FASTEST TIME TRAVELLERS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"               
+        	android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="5dp" >
+    android:padding="5dp"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical"
+    android:gravity="center_vertical|left" >
 <TextView
         android:id="@+id/scr1"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/scoreborder"         
+        android:background="@drawable/scoreborder"  
+        android:textColor="#FF4000"       
         android:padding="5dp"
-        android:text="@string/score1"               
+        android:text=" 04/01/2013  ::  14280 "               
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>
 <LinearLayout
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="5dp" >
+    android:padding="5dp"    
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical"
+    android:gravity="center_vertical|left"  >
 <TextView
         android:id="@+id/scr2"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/scoreborder"         
+        android:background="@drawable/scoreborder"  
+        android:textColor="#FF4000"       
         android:padding="5dp"
-        android:text="@string/score2"               
+        android:text=" 11/25/2013  ::  14279 "               
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>
 <LinearLayout
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="5dp" >
+    android:padding="5dp"     
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical"
+    android:gravity="center_vertical|left" >
 <TextView
         android:id="@+id/scr3"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/scoreborder"         
+        android:background="@drawable/scoreborder"  
+        android:textColor="#FF4000"       
         android:padding="5dp"
-        android:text="@string/score3"               
+        android:text=" 07/02/2013  ::  14278 "               
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>
 </LinearLayout>
