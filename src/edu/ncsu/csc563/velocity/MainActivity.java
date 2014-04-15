@@ -2,9 +2,15 @@ package edu.ncsu.csc563.velocity;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.graphics.Color;
 import android.opengl.GLSurfaceView;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * Activity class from which the Android app is launched
@@ -12,6 +18,8 @@ import android.view.WindowManager;
 public class MainActivity extends Activity {
 
 	private GLSurfaceView mView;
+	public static TextView score;
+	public static int mscore = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,15 @@ public class MainActivity extends Activity {
         // Create a GLES20InteractiveSurfaceView instance and set it as the ContentView for this Activity
         this.mView = new GLES20InteractiveSurfaceView(this);
         setContentView(this.mView);
+        
+        LinearLayout mLayout = new LinearLayout(this);
+        score = new TextView(this);
+        mLayout.addView(score);
+        score.setText(""+mscore);
+        score.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+        score.setTextColor(Color.RED);
+        mLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        this.addContentView(mLayout, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
 
     @Override
