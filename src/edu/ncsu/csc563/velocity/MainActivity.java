@@ -3,6 +3,7 @@ package edu.ncsu.csc563.velocity;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,8 +37,11 @@ public class MainActivity extends Activity {
         LinearLayout mLayout = new LinearLayout(this);
         score = new TextView(this);
         mLayout.addView(score);
-        score.setText(""+mscore);
-        score.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+        score.setText("Score: "+mscore);
+        score.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+        // Set the font
+        Typeface font = Typeface.createFromAsset(getAssets(), "xirod.ttf");
+        score.setTypeface(font);
         score.setTextColor(Color.RED);
         mLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         this.addContentView(mLayout, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));

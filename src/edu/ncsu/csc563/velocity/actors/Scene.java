@@ -2,6 +2,7 @@ package edu.ncsu.csc563.velocity.actors;
 
 import java.util.LinkedList;
 
+import edu.ncsu.csc563.velocity.MainActivity;
 import edu.ncsu.csc563.velocity.actors.components.Collider;
 import edu.ncsu.csc563.velocity.actors.components.ForcedMovement;
 import edu.ncsu.csc563.velocity.actors.components.Material;
@@ -97,6 +98,8 @@ public class Scene {
 				this.mActors.addAll(SegmentFactory.getRandomSegment(zMax));
 			}	
 			
+			//MainActivity.mscore += ForcedMovement.mSpeed;
+			//MainActivity.score.setText("Score: " + MainActivity.mscore);
 			ForcedMovement.mSpeed += 0.0001f;
 		}
 	}
