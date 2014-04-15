@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
         // Set the font
         Typeface font = Typeface.createFromAsset(getAssets(), "xirod.ttf");
         score.setTypeface(font);
-        score.setTextColor(Color.RED);
+        score.setTextColor(Color.rgb(64, 192, 255));
         mLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
         this.addContentView(mLayout, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
