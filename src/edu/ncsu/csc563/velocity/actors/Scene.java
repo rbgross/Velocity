@@ -5,15 +5,17 @@ import java.util.LinkedList;
 import edu.ncsu.csc563.velocity.MainActivity;
 import edu.ncsu.csc563.velocity.actors.components.Collider;
 import edu.ncsu.csc563.velocity.actors.components.ForcedMovement;
+import edu.ncsu.csc563.velocity.actors.components.PlayerController;
 import edu.ncsu.csc563.velocity.actors.components.Material;
 import edu.ncsu.csc563.velocity.physics.Collision;
 
 public class Scene {
 	private Actor mPlayer;
 	private LinkedList<Actor> mActors;
-	public static Scene instance;
+	private static Scene instance;
 	private static boolean paused = false;
 	private static boolean gameOver = false;
+	private static boolean gameStart = true;
 	
 	private Scene() {		
 		this.mPlayer = ActorFactory.ship();
@@ -42,50 +44,54 @@ public class Scene {
 		instance = new Scene();
 	}
 	
-	public void updateScene() {
-		if (!paused) {
+	public void updateScene() {		
+		if (!paused) {			
 			this.mPlayer.update();
 			
 			for (Actor actor : this.mActors) {
 				actor.update();
 			}
 			
-			//Test obstacle ship collisions
-			int i = 0;
-			float colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
-			boolean collided = false;
-			while (colRange < -1.5f) {
-				if (Collision.collisionTest((Collider) this.mPlayer.getComponent("Collider"), (Collider) this.mActors.get(i).getComponent("Collider"))) {
-					collided = true;
-					break;
+			if (!((PlayerController) this.mPlayer.getComponent("Controller")).getInvul()) {
+				//Test obstacle ship collisions
+				int i = 0;
+				float colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
+				boolean collided = false;
+				while (colRange < -1.5f) {
+					if (Collision.collisionTest((Collider) this.mPlayer.getComponent("Collider"), (Collider) this.mActors.get(i).getComponent("Collider"))) {
+						collided = true;
+						break;
+					}
+					
+					i++;
+					if (i < this.mActors.size()) {
+						colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
+					} else {
+						break;
+					}
 				}
 				
-				i++;
-				if (i < this.mActors.size()) {
-					colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
-				} else {
-					break;
+				if (collided) {				
+					paused = true;
+					gameOver = true;
+					
+					for (Actor actor : this.mActors) {
+						//float[] tempCol = ((Material) actor.getComponent("Material")).getDiffuseColor();
+						//tempCol[0] = 1 - tempCol[0];
+						//tempCol[1] = 1 - tempCol[1];
+						//tempCol[2] = 1 - tempCol[2];
+						//((Material) actor.getComponent("Material")).setDiffuseColor(tempCol[0], tempCol[1], tempCol[2]);
+						((Material) actor.getComponent("Material")).setDiffuseColor(1, 1, 1);
+					}
+					
+					//((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
+					//((Material) this.mPlayer.getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
 				}
+			} else {
+				// TODO: VISUALLY SET SHIP SEE THROUGH
 			}
 			
-			if (collided) {				
-				paused = true;
-				gameOver = true;
-				
-				for (Actor actor : this.mActors) {
-					//float[] tempCol = ((Material) actor.getComponent("Material")).getDiffuseColor();
-					//tempCol[0] = 1 - tempCol[0];
-					//tempCol[1] = 1 - tempCol[1];
-					//tempCol[2] = 1 - tempCol[2];
-					//((Material) actor.getComponent("Material")).setDiffuseColor(tempCol[0], tempCol[1], tempCol[2]);
-					((Material) actor.getComponent("Material")).setDiffuseColor(1, 1, 1);
-				}
-				
-				//((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
-				//((Material) this.mPlayer.getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
-			}
-			
-			//Remove actors who's backs have moved past the camera
+			//Remove actors whose backs have moved past the camera
 			float zMin = ((Collider) this.mActors.getFirst().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
 			while (zMin < -15 ) {
 				this.mActors.remove();
@@ -126,5 +132,18 @@ public class Scene {
 	
 	public static void unPause() {
 		paused = false;
+	}
+	
+	public static boolean isGameStart() {
+		return gameStart;
+	}
+	
+	public static void startGame() {
+		gameStart = false;
+		unPause();
+	}
+	
+	public  void activateInvul() {
+		((PlayerController) this.mPlayer.getComponent("Controller")).enableInvul();
 	}
 }
