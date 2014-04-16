@@ -6,13 +6,13 @@ import edu.ncsu.csc563.velocity.actors.components.Transform;
 
 
 public class SegmentFactory {
-	public static final int NUM_SEGMENTS = 6;
+	public static final int NUM_SEGMENTS = 1;
 	
 	public static Segment getRandomSegment() {
 		int rand = new Random().nextInt(NUM_SEGMENTS);
-		switch (rand) {	
+		switch (rand) {			
 			case 0:
-				return pillarSegment();
+				return scatteredCubeSegment();			
 			
 			case 1:
 				return rotatedPillarSegment();
@@ -21,7 +21,7 @@ public class SegmentFactory {
 				return needleSegment();
 				
 			case 3:
-				return scatteredCubeSegment();
+				return pillarSegment();
 			
 			case 4:
 				return mineField();

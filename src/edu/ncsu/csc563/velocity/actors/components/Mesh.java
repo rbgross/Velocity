@@ -61,12 +61,15 @@ public class Mesh extends Component {
 		//Tell the graphics card how position data is stored in our vertex buffer, so the shader knows
 		//where to get the data for the "position" attribute value in the shader
 		GLES20.glEnableVertexAttribArray(GLES20Shader.ATTRIB_POSITION);
-        GLES20.glVertexAttribPointer(GLES20Shader.ATTRIB_POSITION, 3, GLES20.GL_FLOAT, false, 6 * 4, 0);
+        GLES20.glVertexAttribPointer(GLES20Shader.ATTRIB_POSITION, 3, GLES20.GL_FLOAT, false, 8 * 4, 0);
         
         //Tell the graphics card how normal data is stored in our vertex buffer, so the shader knows
       	//where to get the data for the "normal" attribute value in the shader
         GLES20.glEnableVertexAttribArray(GLES20Shader.ATTRIB_NORMAL);
-        GLES20.glVertexAttribPointer(GLES20Shader.ATTRIB_NORMAL, 3, GLES20.GL_FLOAT, false, 6 * 4, 12);
+        GLES20.glVertexAttribPointer(GLES20Shader.ATTRIB_NORMAL, 3, GLES20.GL_FLOAT, false, 8 * 4, 12);
+        
+        GLES20.glEnableVertexAttribArray(GLES20Shader.ATTRIB_TEXCOORD);
+        GLES20.glVertexAttribPointer(GLES20Shader.ATTRIB_TEXCOORD, 2, GLES20.GL_FLOAT, false, 8 * 4, 24);
         
         //Bind the element buffer using the handle we generated for the element buffer earlier,
       	//to tell the graphics card which buffer we're talking about when we issue the next few

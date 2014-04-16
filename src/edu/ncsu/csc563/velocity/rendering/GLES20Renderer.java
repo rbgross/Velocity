@@ -6,11 +6,15 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import edu.ncsu.csc563.velocity.R;
 import edu.ncsu.csc563.velocity.actors.Scene;
 import edu.ncsu.csc563.velocity.resources.ResourceManager;
 
@@ -29,7 +33,9 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	}
 	
 	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+	public void onSurfaceCreated(GL10 gl, EGLConfig config) {		
+		ResourceManager.loadTexture(this.context, R.raw.ship);
+		
 		String modelName;
 		
 		modelName = "meshes/AdorbsShip.vmf";
@@ -246,17 +252,19 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		}
 		
 		GLES20ShaderFactory.diffuseSpecular();
-		
-		//Create a basic shader and activate it
-		this.mActiveShader = GLES20ShaderFactory.getShader("diffuseSpecular");
-		this.mActiveShader.use();
+		GLES20ShaderFactory.shipShader();
 		
 		//Enable GL states to perform a depth test and cull back facing polygons
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		GLES20.glEnable(GLES20.GL_CULL_FACE);
+		GLES20.glEnable(GLES20.GL_BLEND);
+		GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		
 		//Set the default color of the background each time a new frame is drawn
 		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		
+		this.mActiveShader = GLES20ShaderFactory.getShader("diffuseSpecular");
+		this.mActiveShader.use();
 		
 		//Calculate the value for a view matrix and store that value for this
 		//shader on the graphics card
@@ -268,6 +276,11 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		float lightPos[] = {1.0f, 1.0f, -1.0f, 0.0f};
 		this.mActiveShader.setUniform("lightPosition", lightPos);
 		
+		this.mActiveShader = GLES20ShaderFactory.getShader("shipShader");
+		this.mActiveShader.use();
+		this.mActiveShader.setUniform("view", view);
+		this.mActiveShader.setUniform("lightPosition", lightPos);
+		
 		Scene.getInstance().setContext(context);
 	}
 	
@@ -275,10 +288,17 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 	public void onSurfaceChanged(GL10 unused, int width, int height) {        
         //Calculate the value for a projection matrix and store the value for it on 
         //the graphics card
+		this.mActiveShader = GLES20ShaderFactory.getShader("diffuseSpecular");
+		this.mActiveShader.use();
+		
         float proj[] = new float[16];
         float aspect = 1.0f * width / height;        
         Matrix.perspectiveM(proj, 0, 45, aspect, 0.1f, 1000.0f);
         this.mActiveShader.setUniform("proj", proj);
+        
+        this.mActiveShader = GLES20ShaderFactory.getShader("shipShader");
+		this.mActiveShader.use();
+		this.mActiveShader.setUniform("proj", proj);
 	}
 	
 	@Override

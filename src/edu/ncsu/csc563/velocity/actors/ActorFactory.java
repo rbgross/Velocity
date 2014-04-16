@@ -14,9 +14,9 @@ public class ActorFactory {
 		((Transform) actor.getComponent("Transform")).setPosition(0, 0, -2);
 		((Transform) actor.getComponent("Transform")).rotate(0, 180, 0);
 		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/AdorbsShip.vmf"));
-		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
+		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("shipShader"), ResourceManager.getTexture()));
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.5f, 1.0f, 0.0f);
-		actor.addComponent("Controller", new PlayerController(((Transform) actor.getComponent("Transform"))));
+		actor.addComponent("Controller", new PlayerController((Transform) actor.getComponent("Transform"), (Material) actor.getComponent("Material")));
 		actor.addComponent("Collider", new Collider());
 		float[] center = {0, 0, 0};
 		float[] halfWidths = {0.5f, 0.5f, 0.5f};

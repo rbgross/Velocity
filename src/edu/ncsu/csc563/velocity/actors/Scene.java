@@ -28,6 +28,7 @@ public class Scene {
 	private static boolean paused = false;
 	private static boolean gameOver = false;
 	private static boolean gameStart = true;
+	private int powerLevel = 0;
 	
 	private Scene() {		
 		this.mPlayer = ActorFactory.ship();
@@ -96,6 +97,8 @@ public class Scene {
 					        MainActivity.score.setText("Score: " + MainActivity.mscore);
 					    } 
 					});
+					
+					this.powerLevel = Math.min(this.powerLevel + 1, 5);
 				}
 				
 				i++;
@@ -164,8 +167,6 @@ public class Scene {
 						((Material) actor.getComponent("Material")).setDiffuseColor(1, 1, 1);
 					}
 				}
-			} else {
-				// TODO: VISUALLY SET SHIP SEE THROUGH
 			}
 			
 			//Remove actors whose backs have moved past the camera
@@ -200,9 +201,7 @@ public class Scene {
 		}
 	}
 	
-	public void drawScene() {
-		this.mPlayer.draw();
-		
+	public void drawScene() {		
 		for (Actor actor : this.mObstacles) {
 			actor.draw();
 		}
@@ -210,6 +209,8 @@ public class Scene {
 		for (Actor actor : this.mTokens) {
 			actor.draw();
 		}
+		
+		this.mPlayer.draw();
 	}
 	
 	public static boolean isGameOver() {
@@ -238,7 +239,10 @@ public class Scene {
 	}
 	
 	public  void activateInvul() {
-		((PlayerController) this.mPlayer.getComponent("Controller")).enableInvul();
+		if (this.powerLevel == 5) {
+			this.powerLevel = 0;
+			((PlayerController) this.mPlayer.getComponent("Controller")).enableInvul();
+		}
 	}
 	
 	public void setContext(Context context) {

@@ -7,16 +7,19 @@ public class PlayerController extends Component {
 	private Transform mTransform;
 	private boolean invul;
 	private long invulStartTime;
+	private Material mMaterial;
 	
 	public static final long INVUL_DURATION = 3000;
 	
-	public PlayerController(Transform transform) {
+	public PlayerController(Transform transform, Material material) {
 		this.mTransform = transform;
+		this.mMaterial = material;
 	}
 	
 	public void enableInvul() {
 		this.invul = true;
 		this.invulStartTime = SystemClock.elapsedRealtime();
+		this.mMaterial.setAlphaVal(0.5f);
 	}
 	
 	public boolean getInvul() {
@@ -39,6 +42,7 @@ public class PlayerController extends Component {
 		
 		if (this.invul && SystemClock.elapsedRealtime() - this.invulStartTime > INVUL_DURATION) {
 			this.invul = false;
+			this.mMaterial.setAlphaVal(1.0f);
 		}
 	}
 }
