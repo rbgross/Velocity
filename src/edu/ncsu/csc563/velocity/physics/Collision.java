@@ -1,6 +1,7 @@
 package edu.ncsu.csc563.velocity.physics;
 
 import edu.ncsu.csc563.velocity.actors.components.Collider;
+import edu.ncsu.csc563.velocity.actors.components.colliders.CircleCollider;
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
 import edu.ncsu.csc563.velocity.actors.components.colliders.SphereCollider;
 
@@ -217,6 +218,26 @@ public class Collision {
 		ra = aHW[0] * AbsR[5] + aHW[1] * AbsR[2];
 		rb = bHW[0] * AbsR[7] + bHW[1] * AbsR[6];
 		if (Math.abs(t[1] * R[2] - t[0] * R[5]) > ra + rb) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static boolean collisionTest(SphereCollider sphere, CircleCollider circle) {
+		float sphereRad = sphere.getRadius();
+		float circleRad = circle.getRadius();
+		float[] sphereCen = sphere.getCenter();
+		float[] circleCen = circle.getCenter();
+		
+		// Calculate squared distance between centers
+		float[] d = {sphereCen[0] - circleCen[0], sphereCen[1] - circleCen[1], sphereCen[2] - circleCen[2]};
+		
+		// If the squared distance is more than radius of the sphere squared, it can't intersect
+		if (d[2] * d[2] > sphereRad * sphereRad) {
+			return false;
+		}
+		if (d[0] * d[0] + d[1] * d[1] > circleRad * circleRad) {
 			return false;
 		}
 		

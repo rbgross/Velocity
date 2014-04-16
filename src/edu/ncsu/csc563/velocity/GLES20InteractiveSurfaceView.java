@@ -63,15 +63,15 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         			this.mp.pause();
         			this.mp.seekTo(0);
         			sp.play(endSound, 1, 1, 0, 0, 1);
-        		} else {	        		
-	        		if (!Scene.isPaused()) {
-	            		Scene.pause();
-	                    this.mp.pause();
-	            	} else {
-	            		this.mGravity = null;
-	            		Scene.unPause();
-	            		this.mp.start();
-	            	}
+        		} else if (Scene.isGameStart()) {
+        			this.mGravity = null;
+            		Scene.startGame();
+            		this.mp.start();
+        		} else if (Scene.isPaused()) {
+        			this.mp.start();
+        			Scene.unPause();
+        		} else {
+        			Scene.getInstance().activateInvul();
         		}
         		break;
     	}  	

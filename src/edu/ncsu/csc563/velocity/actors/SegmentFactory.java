@@ -7,11 +7,16 @@ import edu.ncsu.csc563.velocity.actors.components.Transform;
 
 
 public class SegmentFactory {
-	public static final int NUM_SEGMENTS = 6;
+	//public static final int NUM_SEGMENTS = 6;
+	public static final int NUM_SEGMENTS = 1;
 	
 	public static ArrayList<Actor> getRandomSegment(float zDepth) {
 		int rand = new Random().nextInt(NUM_SEGMENTS);
 		switch (rand) {	
+			case 0:	
+				return tokenSegment().getActors(zDepth + 20);
+		
+			/*
 			case 0:
 				return pillarSegment().getActors(zDepth + 20);
 			
@@ -29,7 +34,7 @@ public class SegmentFactory {
 		
 			case 5:
 				return  panelSegment().getActors(zDepth + 20);
-			
+			*/
 			default:
 				return null;
 		}
@@ -350,6 +355,16 @@ public class SegmentFactory {
 		actor = ActorFactory.rectPrism();
 		((Transform) actor.getComponent("Transform")).setPosition(0, 0, 4);
 		((Transform) actor.getComponent("Transform")).setRotation(90, 120, 0);
+		segment.addActor(actor);
+		
+		return segment;
+	}
+	
+	public static Segment tokenSegment() {	
+		Segment segment = new Segment(0);
+		Actor actor;
+		
+		actor = ActorFactory.token();
 		segment.addActor(actor);
 		
 		return segment;

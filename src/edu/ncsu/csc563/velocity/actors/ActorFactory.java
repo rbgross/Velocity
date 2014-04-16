@@ -1,6 +1,7 @@
 package edu.ncsu.csc563.velocity.actors;
 
 import edu.ncsu.csc563.velocity.actors.components.*;
+import edu.ncsu.csc563.velocity.actors.components.colliders.CircleCollider;
 import edu.ncsu.csc563.velocity.actors.components.colliders.OBBCollider;
 import edu.ncsu.csc563.velocity.actors.components.colliders.SphereCollider;
 import edu.ncsu.csc563.velocity.rendering.GLES20ShaderFactory;
@@ -602,6 +603,25 @@ public class ActorFactory {
 			OBBCollider subCollider4 = new OBBCollider((Transform) actor.getComponent("Transform"), center4, halfWidths1);
 			((Collider) actor.getComponent("Collider")).addOBBCollider(subCollider4);
 		}
+		actor.addComponent("ForcedMovement", new ForcedMovement((Transform) actor.getComponent("Transform")));
+		return actor;
+	}
+	
+	public static Actor token() {
+		Actor actor = new Actor();
+		actor.addComponent("Transform", new Transform());
+		((Transform) actor.getComponent("Transform")).rotate(0, 90, 0);
+		actor.addComponent("Mesh", ResourceManager.getMesh("meshes/Nathan2/token.vmf"));
+		actor.addComponent("Material", new Material(GLES20ShaderFactory.getShader("diffuseSpecular")));
+		((Material) actor.getComponent("Material")).setDiffuseColor(0.25f, 0.75f, 1.0f);
+		actor.addComponent("Collider", new Collider());
+		float[] center = {0, 0, 0};
+		float radius = 0.5f;
+		float[] halfWidths = {0.1f, 1.0f, 1.0f};
+		OBBCollider obbCollider = new OBBCollider((Transform) actor.getComponent("Transform"), center, halfWidths);
+		CircleCollider sphereCollider = new CircleCollider((Transform) actor.getComponent("Transform"), center, radius);
+		((Collider) actor.getComponent("Collider")).setPrimaryCollider(obbCollider);
+		((Collider) actor.getComponent("Collider")).addCircleCollider(sphereCollider);
 		actor.addComponent("ForcedMovement", new ForcedMovement((Transform) actor.getComponent("Transform")));
 		return actor;
 	}
