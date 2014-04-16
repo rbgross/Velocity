@@ -10,7 +10,10 @@ public class SegmentFactory {
 	
 	public static Segment getRandomSegment() {
 		int rand = new Random().nextInt(NUM_SEGMENTS);
-		switch (rand) {			
+		switch (rand) {	
+			case 0:
+				return pillarSegment();
+			/*
 			case 0:
 				return scatteredCubeSegment();			
 			
@@ -28,6 +31,7 @@ public class SegmentFactory {
 		
 			case 5:
 				return panelSegment();
+			*/
 			default:
 				return null;
 		}
@@ -236,9 +240,6 @@ public class SegmentFactory {
 		((Transform) actor.getComponent("Transform")).setRotation(0, 90, 0);
 		segment.addObstacle(actor);
 		
-		actor = ActorFactory.token();
-		segment.addToken(actor);
-		
 		actor = ActorFactory.rectPrism();
 		((Transform) actor.getComponent("Transform")).setPosition(1.5f, 0, 4);
 		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
@@ -268,6 +269,16 @@ public class SegmentFactory {
 		((Transform) actor.getComponent("Transform")).setPosition(-1.5f, 0, 12);
 		((Transform) actor.getComponent("Transform")).setRotation(90, 0, 0);
 		segment.addObstacle(actor);
+		
+		Random rand = new Random();
+		for (int i = 0; i < 3; i++) {
+			actor = ActorFactory.token();
+			float x = rand.nextInt(3) * 3.5f - 3.5f;
+			float y = rand.nextInt(3) * 3.5f - 3.5f;
+			float z = rand.nextInt(7) * 4 - 12;
+			((Transform) actor.getComponent("Transform")).setPosition(x, y, z);
+			segment.addToken(actor);
+		}
 		
 		return segment;
 	}

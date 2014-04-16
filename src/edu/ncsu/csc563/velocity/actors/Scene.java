@@ -239,10 +239,10 @@ public class Scene {
 	}
 	
 	public  void activateInvul() {
-		if (this.powerLevel == 5) {
+		//if (this.powerLevel == 5) {
 			this.powerLevel = 0;
 			((PlayerController) this.mPlayer.getComponent("Controller")).enableInvul();
-		}
+		//}
 	}
 	
 	public void setContext(Context context) {

@@ -66,7 +66,7 @@ public class GLES20ShaderFactory {
 				//Transform the normal and position values to eye space for lighting calculations
 				"	eyeNormal = mat3( view * model ) * normal;" +
 				"	eyePosition = vec3( view * model * vec4( position, 1.0 ) );" +
-				"	texCoord = vec2(texCoordinate.x, 1 - texCoordinate.y);" +
+				"	texCoord = vec2(texCoordinate.x, 1.0 - texCoordinate.y);" +
 				//Transform the position into clip coordinates as the primary output for this shader
 				"	gl_Position = proj * view * model * vec4( position, 1.0 );" +
 				"}";
@@ -108,8 +108,7 @@ public class GLES20ShaderFactory {
 				"	vec4 diffuse = texture2D(shipTex, texCoord) * max ( dot( normal, toLightDir ), 0.0 );" +
 				"	vec4 specular = texture2D(shipTex, texCoord) * pow( max( dot( normal, halfAngle ), 0.0 ), specExp );" +
 				//The primary output of this fragment shader is the color of this pixel, represented in a vec4
-				//"	gl_FragColor = ( ambient + diffuse + specular );" +
-				"	gl_FragColor = vec4(vec3(texture2D(shipTex, texCoord)), alphaVal);" +
+				"	gl_FragColor = vec4( vec3(ambient + diffuse + specular), alphaVal );" +
 				"}";
 		
 		//Get a handle for the shader
