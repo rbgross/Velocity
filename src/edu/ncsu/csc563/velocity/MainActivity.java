@@ -6,12 +6,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
 import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 

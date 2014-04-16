@@ -2,9 +2,6 @@ package edu.ncsu.csc563.velocity.actors;
 
 import java.util.LinkedList;
 
-import android.app.Activity;
-import android.content.Context;
-import android.widget.TextView;
 
 import edu.ncsu.csc563.velocity.MainActivity;
 import edu.ncsu.csc563.velocity.actors.components.Collider;
@@ -16,7 +13,6 @@ import edu.ncsu.csc563.velocity.physics.Collision;
 public class Scene {
 	private Actor mPlayer;
 	private LinkedList<Actor> mActors;
-	private Context context;
 	private static Scene instance;
 	private static boolean paused = false;
 	private static boolean gameOver = false;
@@ -160,9 +156,5 @@ public class Scene {
 	
 	public  void activateInvul() {
 		((PlayerController) this.mPlayer.getComponent("Controller")).enableInvul();
-	}
-	
-	public void setContext(Context context) {
-		this.context = context;
 	}
 }
