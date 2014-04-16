@@ -45,4 +45,8 @@ public class Collider extends Component {
 	public ArrayList<SphereCollider> getSphereColliders() {
 		return this.mSphereColliders;
 	}
+	
+	public ArrayList<CircleCollider> getCircleColliders() {
+		return this.mCircleColliders;
+	}
 }

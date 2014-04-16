@@ -12,7 +12,8 @@ import edu.ncsu.csc563.velocity.physics.Collision;
 
 public class Scene {
 	private Actor mPlayer;
-	private LinkedList<Actor> mActors;
+	private LinkedList<Actor> mObstacles;
+	private LinkedList<Actor> mTokens;
 	private static Scene instance;
 	private static boolean paused = false;
 	private static boolean gameOver = false;
@@ -20,15 +21,20 @@ public class Scene {
 	
 	private Scene() {		
 		this.mPlayer = ActorFactory.ship();
-		this.mActors = new LinkedList<Actor>();
+		this.mObstacles = new LinkedList<Actor>();
+		this.mTokens = new LinkedList<Actor>();
 		
-		this.mActors.addAll(SegmentFactory.getRandomSegment(0));
+		Segment segment = SegmentFactory.getRandomSegment();
+		this.mObstacles.addAll(segment.getObstacles(20));
+		this.mTokens.addAll(segment.getTokens(20));		
 		
 		//Check if the max depth is too high; if so, add a new segment
-		float zMax = ((Collider) this.mActors.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
+		float zMax = ((Collider) this.mObstacles.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
 		while (zMax < 200) {
-			this.mActors.addAll(SegmentFactory.getRandomSegment(zMax));
-			zMax = ((Collider) this.mActors.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
+			segment = SegmentFactory.getRandomSegment();
+			this.mObstacles.addAll(segment.getObstacles(zMax + 20));
+			this.mTokens.addAll(segment.getTokens(zMax + 20));
+			zMax = ((Collider) this.mObstacles.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
 		}	
 	}
 	
@@ -55,24 +61,54 @@ public class Scene {
 		if (!paused) {			
 			this.mPlayer.update();
 			
-			for (Actor actor : this.mActors) {
+			for (Actor actor : this.mObstacles) {
 				actor.update();
+			}
+			
+			for (Actor actor : this.mTokens) {
+				actor.update();
+			}
+			
+			//Test token ship collisions
+			int i = 0;
+			float colRange = 0;
+			if (i < this.mTokens.size()) {
+				colRange = ((Collider) this.mTokens.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
+			}
+			while (colRange < -1.5f && i < this.mTokens.size()) {
+				if (Collision.collisionTest((Collider) this.mPlayer.getComponent("Collider"), (Collider) this.mTokens.get(i).getComponent("Collider"))) {
+					this.mTokens.remove(i);
+					
+					MainActivity.mscore += 100;
+					MainActivity.score.post(new Runnable() {
+					    public void run() {
+					        MainActivity.score.setText("Score: " + MainActivity.mscore);
+					    } 
+					});
+				}
+				
+				i++;
+				if (i < this.mTokens.size()) {
+					colRange = ((Collider) this.mTokens.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
+				} else {
+					break;
+				}
 			}
 			
 			if (!((PlayerController) this.mPlayer.getComponent("Controller")).getInvul()) {
 				//Test obstacle ship collisions
-				int i = 0;
-				float colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
+				i = 0;
+				colRange = ((Collider) this.mObstacles.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
 				boolean collided = false;
 				while (colRange < -1.5f) {
-					if (Collision.collisionTest((Collider) this.mPlayer.getComponent("Collider"), (Collider) this.mActors.get(i).getComponent("Collider"))) {
+					if (Collision.collisionTest((Collider) this.mPlayer.getComponent("Collider"), (Collider) this.mObstacles.get(i).getComponent("Collider"))) {
 						collided = true;
 						break;
 					}
 					
 					i++;
-					if (i < this.mActors.size()) {
-						colRange = ((Collider) this.mActors.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
+					if (i < this.mObstacles.size()) {
+						colRange = ((Collider) this.mObstacles.get(i).getComponent("Collider")).getPrimaryCollider().getZBounds()[0];
 					} else {
 						break;
 					}
@@ -82,41 +118,42 @@ public class Scene {
 					paused = true;
 					gameOver = true;
 					
-					for (Actor actor : this.mActors) {
-						//float[] tempCol = ((Material) actor.getComponent("Material")).getDiffuseColor();
-						//tempCol[0] = 1 - tempCol[0];
-						//tempCol[1] = 1 - tempCol[1];
-						//tempCol[2] = 1 - tempCol[2];
-						//((Material) actor.getComponent("Material")).setDiffuseColor(tempCol[0], tempCol[1], tempCol[2]);
+					for (Actor actor : this.mObstacles) {
 						((Material) actor.getComponent("Material")).setDiffuseColor(1, 1, 1);
 					}
-					
-					//((Material) this.mActors.get(i).getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
-					//((Material) this.mPlayer.getComponent("Material")).setDiffuseColor(1.0f, 0, 0);
 				}
 			} else {
 				// TODO: VISUALLY SET SHIP SEE THROUGH
 			}
 			
 			//Remove actors whose backs have moved past the camera
-			float zMin = ((Collider) this.mActors.getFirst().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
+			if (this.mTokens.size() > 0) {
+				float zMin = ((Collider) this.mTokens.getFirst().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
+				while (zMin < -15 ) {
+					this.mTokens.remove();
+					if (this.mTokens.size() > 0) {
+						zMin = ((Collider) this.mTokens.getFirst().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
+					} else {
+						break;
+					}
+				}
+			}
+			
+			//Remove actors whose backs have moved past the camera
+			float zMin = ((Collider) this.mObstacles.getFirst().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
 			while (zMin < -15 ) {
-				this.mActors.remove();
-				zMin = ((Collider) this.mActors.getFirst().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
+				this.mObstacles.remove();
+				zMin = ((Collider) this.mObstacles.getFirst().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
 			}
 			
 			//Check if the max depth is too high; if so, add a new segment
-			float zMax = ((Collider) this.mActors.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
+			float zMax = ((Collider) this.mObstacles.getLast().getComponent("Collider")).getPrimaryCollider().getZBounds()[1];
 			if (zMax < 200) {
-				this.mActors.addAll(SegmentFactory.getRandomSegment(zMax));
+				Segment segment = SegmentFactory.getRandomSegment();
+				this.mObstacles.addAll(segment.getObstacles(zMax + 20));
+				this.mTokens.addAll(segment.getTokens(zMax + 20));
 			}	
 			
-			MainActivity.mscore += 1;
-			MainActivity.score.post(new Runnable() {
-			    public void run() {
-			        MainActivity.score.setText("Score: " + MainActivity.mscore);
-			    } 
-			});
 			ForcedMovement.mSpeed += 0.0001f;
 		}
 	}
@@ -124,7 +161,11 @@ public class Scene {
 	public void drawScene() {
 		this.mPlayer.draw();
 		
-		for (Actor actor : this.mActors) {
+		for (Actor actor : this.mObstacles) {
+			actor.draw();
+		}
+		
+		for (Actor actor : this.mTokens) {
 			actor.draw();
 		}
 	}

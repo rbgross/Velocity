@@ -34,6 +34,20 @@ public class Collision {
 					return true;
 				}
 			}
+			
+			for (CircleCollider circle2 : c2.getCircleColliders()) {
+				if (collisionTest(sphere1, circle2)) {
+					return true;
+				}
+			}
+		}
+		
+		for (CircleCollider circle1 : c1.getCircleColliders()) {
+			for (SphereCollider sphere2 : c2.getSphereColliders()) {
+				if (collisionTest(sphere2, circle1)) {
+					return true;
+				}
+			}
 		}
 		
 		return false;
@@ -233,14 +247,13 @@ public class Collision {
 		// Calculate squared distance between centers
 		float[] d = {sphereCen[0] - circleCen[0], sphereCen[1] - circleCen[1], sphereCen[2] - circleCen[2]};
 		
-		// If the squared distance is more than radius of the sphere squared, it can't intersect
-		if (d[2] * d[2] > sphereRad * sphereRad) {
-			return false;
-		}
-		if (d[0] * d[0] + d[1] * d[1] > circleRad * circleRad) {
-			return false;
-		}
 		
+		if (d[2] * d[2] >  sphereRad * sphereRad) {
+			return false;
+		}
+		if (d[0] * d[0] + d[1] * d[1] > (sphereRad + circleRad) * (sphereRad + circleRad)) {
+			return false;
+		}
 		return true;
 	}
 }

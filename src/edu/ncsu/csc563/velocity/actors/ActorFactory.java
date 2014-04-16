@@ -616,12 +616,12 @@ public class ActorFactory {
 		((Material) actor.getComponent("Material")).setDiffuseColor(0.25f, 0.75f, 1.0f);
 		actor.addComponent("Collider", new Collider());
 		float[] center = {0, 0, 0};
-		float radius = 0.5f;
-		float[] halfWidths = {0.1f, 1.0f, 1.0f};
+		float radius = 0.25f;
+		float[] halfWidths = {0.025f, 0.25f, 0.25f};
 		OBBCollider obbCollider = new OBBCollider((Transform) actor.getComponent("Transform"), center, halfWidths);
-		CircleCollider sphereCollider = new CircleCollider((Transform) actor.getComponent("Transform"), center, radius);
+		CircleCollider circleCollider = new CircleCollider((Transform) actor.getComponent("Transform"), center, radius);
 		((Collider) actor.getComponent("Collider")).setPrimaryCollider(obbCollider);
-		((Collider) actor.getComponent("Collider")).addCircleCollider(sphereCollider);
+		((Collider) actor.getComponent("Collider")).addCircleCollider(circleCollider);
 		actor.addComponent("ForcedMovement", new ForcedMovement((Transform) actor.getComponent("Transform")));
 		return actor;
 	}

@@ -6,7 +6,8 @@ import edu.ncsu.csc563.velocity.actors.components.Transform;
 import edu.ncsu.csc563.velocity.actors.components.Collider;
 
 public class Segment {
-	private ArrayList<Actor> mActors;
+	private ArrayList<Actor> mObstacles;
+	private ArrayList<Actor> mTokens;
 	private ArrayList<Float> mDepths;
 	private float zMin;
 	private float zMax;
@@ -14,13 +15,14 @@ public class Segment {
 	
 	public Segment(float gap) {
 		this.gap = gap;
-		this.mActors = new ArrayList<Actor>();
+		this.mObstacles = new ArrayList<Actor>();
+		this.mTokens = new ArrayList<Actor>();
 		this.mDepths = new ArrayList<Float>();
 		this.zMin = Float.MAX_VALUE;
 		this.zMax = -Float.MAX_VALUE;
 	}
 	
-	public void addActor(Actor actor) {
+	public void addObstacle(Actor actor) {
 		float[] zBounds = ((Collider) actor.getComponent("Collider")).getPrimaryCollider().getZBounds();
 		if (zBounds[0] < this.zMin) {
 			this.zMin = zBounds[0];
@@ -34,20 +36,33 @@ public class Segment {
 		while (true) {
 			if (i == this.mDepths.size()) {
 				this.mDepths.add(zBounds[0]);
-				this.mActors.add(actor);
+				this.mObstacles.add(actor);
 				break;
 			}
 			if (zBounds[0] < this.mDepths.get(i)) {
 				this.mDepths.add(i, zBounds[0]);
-				this.mActors.add(i, actor);
+				this.mObstacles.add(i, actor);
 				break;
 			}
 			i++;
 		}
 	}
 	
-	public ArrayList<Actor> getActors(float zDepth) {
-		ArrayList<Actor> actors = new ArrayList<Actor>(this.mActors);
+	public void addToken(Actor actor) {		
+		this.mTokens.add(actor);		
+	}
+	
+	public ArrayList<Actor> getObstacles(float zDepth) {
+		ArrayList<Actor> actors = new ArrayList<Actor>(this.mObstacles);
+		float zPos = zDepth - this.zMin + this.gap;
+		for (Actor actor : actors) {
+			((Transform) actor.getComponent("Transform")).translate(0, 0, zPos);
+		}
+		return actors;
+	}
+	
+	public ArrayList<Actor> getTokens(float zDepth) {
+		ArrayList<Actor> actors = new ArrayList<Actor>(this.mTokens);
 		float zPos = zDepth - this.zMin + this.gap;
 		for (Actor actor : actors) {
 			((Transform) actor.getComponent("Transform")).translate(0, 0, zPos);
