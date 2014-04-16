@@ -98,7 +98,7 @@ public class Scene {
 					    } 
 					});
 					
-					this.powerLevel = Math.min(this.powerLevel + 1, 5);
+					this.powerLevel = Math.min(this.powerLevel + 1, 4);
 				}
 				
 				i++;
@@ -213,6 +213,10 @@ public class Scene {
 		this.mPlayer.draw();
 	}
 	
+	public int getPowerLevel() {
+		return this.powerLevel;
+	}
+	
 	public static boolean isGameOver() {
 		return gameOver;
 	}
@@ -239,10 +243,10 @@ public class Scene {
 	}
 	
 	public  void activateInvul() {
-		//if (this.powerLevel == 5) {
+		if (this.powerLevel == 4) {
 			this.powerLevel = 0;
 			((PlayerController) this.mPlayer.getComponent("Controller")).enableInvul();
-		//}
+		}
 	}
 	
 	public void setContext(Context context) {

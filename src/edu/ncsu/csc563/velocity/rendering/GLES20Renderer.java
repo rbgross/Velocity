@@ -312,8 +312,18 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 			//Set the default color of the background each time a new frame is drawn
 			GLES20.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		} else {
-			//Set the default color of the background each time a new frame is drawn
-			GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+			if (Scene.getInstance().getPowerLevel() == 0) {
+				GLES20.glClearColor(1.0f, 0.6f, 0.5f, 1.0f);
+			} else if (Scene.getInstance().getPowerLevel() == 1) {
+				GLES20.glClearColor(1.0f, 1.0f, 0.6f, 1.0f);
+			} else if (Scene.getInstance().getPowerLevel() == 2) {
+				GLES20.glClearColor(0.5f, 0.8f, 1.0f, 0.6f);
+			} else if (Scene.getInstance().getPowerLevel() == 3) {
+				GLES20.glClearColor(0.5f, 0.65f, 0.85f, 1.0f);
+			} else {
+				//Set the default color of the background each time a new frame is drawn
+				GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+			}
 		}
 		
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);

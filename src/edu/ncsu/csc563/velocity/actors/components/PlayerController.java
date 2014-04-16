@@ -28,7 +28,7 @@ public class PlayerController extends Component {
 	
 	@Override
 	public void update() {		
-		this.mTransform.translate(-GLES20InteractiveSurfaceView.tilt / 7, GLES20InteractiveSurfaceView.roll, 0);
+		this.mTransform.translate(-GLES20InteractiveSurfaceView.tilt / 14, GLES20InteractiveSurfaceView.roll / 2, 0);
 		float[] tempPos = this.mTransform.getPosition();
 		tempPos[0] = Math.min(tempPos[0], 5.5f);
 		tempPos[0] = Math.max(tempPos[0], -5.5f);
