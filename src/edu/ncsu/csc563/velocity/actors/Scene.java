@@ -2,7 +2,15 @@ package edu.ncsu.csc563.velocity.actors;
 
 import java.util.LinkedList;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.widget.Toast;
 
+
+import edu.ncsu.csc563.velocity.DisplayHighScores;
 import edu.ncsu.csc563.velocity.MainActivity;
 import edu.ncsu.csc563.velocity.actors.components.Collider;
 import edu.ncsu.csc563.velocity.actors.components.ForcedMovement;
@@ -14,6 +22,7 @@ public class Scene {
 	private Actor mPlayer;
 	private LinkedList<Actor> mObstacles;
 	private LinkedList<Actor> mTokens;
+	private static Context context;
 	private static Scene instance;
 	private static boolean paused = false;
 	private static boolean gameOver = false;
@@ -55,6 +64,7 @@ public class Scene {
 		    } 
 		});
 		instance = new Scene();
+		Scene.getInstance().setContext(context);
 	}
 	
 	public void updateScene() {		
@@ -117,7 +127,38 @@ public class Scene {
 				if (collided) {				
 					paused = true;
 					gameOver = true;
-					
+					SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+					final int hs1 = sharedPref.getInt("hs1", 0);
+					final int hs2 = sharedPref.getInt("hs2", 0);
+					final int hs3 = sharedPref.getInt("hs3", 0);
+
+					if (MainActivity.mscore > hs1) {
+						SharedPreferences.Editor editor = sharedPref.edit();
+						editor.putInt("hs1", MainActivity.mscore);
+						editor.commit();
+						Intent intent = new Intent(context, DisplayHighScores.class);
+						context.startActivity(intent);
+					} else if (MainActivity.mscore > hs2) {
+						SharedPreferences.Editor editor = sharedPref.edit();
+						editor.putInt("hs2", MainActivity.mscore);
+						editor.commit();
+						Intent intent = new Intent(context, DisplayHighScores.class);
+						context.startActivity(intent);
+					} else if (MainActivity.mscore > hs3) {
+						SharedPreferences.Editor editor = sharedPref.edit();
+						editor.putInt("hs3", MainActivity.mscore);
+						editor.commit();
+						Intent intent = new Intent(context, DisplayHighScores.class);
+						context.startActivity(intent);
+					} else {
+						((Activity) context).runOnUiThread(new Runnable() {
+						  public void run() {
+							  Toast toast = Toast.makeText(context, "You didn't beat your high score.", Toast.LENGTH_SHORT);
+							  toast.show();
+						  }
+						});
+						
+					}
 					for (Actor actor : this.mObstacles) {
 						((Material) actor.getComponent("Material")).setDiffuseColor(1, 1, 1);
 					}
@@ -197,5 +238,9 @@ public class Scene {
 	
 	public  void activateInvul() {
 		((PlayerController) this.mPlayer.getComponent("Controller")).enableInvul();
+	}
+	
+	public void setContext(Context context) {
+		this.context = context;
 	}
 }

@@ -267,6 +267,8 @@ public class GLES20Renderer implements GLSurfaceView.Renderer {
 		//Store the value for the light position on the graphics card
 		float lightPos[] = {1.0f, 1.0f, -1.0f, 0.0f};
 		this.mActiveShader.setUniform("lightPosition", lightPos);
+		
+		Scene.getInstance().setContext(context);
 	}
 	
 	@Override
