@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
 import android.widget.Toast;
 
 
@@ -153,7 +154,7 @@ public class Scene {
 					} else {
 						((Activity) context).runOnUiThread(new Runnable() {
 						  public void run() {
-							  Toast toast = Toast.makeText(context, "You didn't beat your high score.", Toast.LENGTH_SHORT);
+							  Toast toast = Toast.makeText(context, "You got " + MainActivity.mscore + "\nTry to beat your high score of " + hs3, Toast.LENGTH_SHORT);
 							  toast.show();
 						  }
 						});
