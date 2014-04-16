@@ -1,9 +1,11 @@
 package edu.ncsu.csc563.velocity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MotionEvent;
 import android.widget.TextView;
 
 public class DisplayHighScores extends Activity{
@@ -26,5 +28,17 @@ public class DisplayHighScores extends Activity{
 		scr1.setText(hs1 + "");
 		scr2.setText(hs2 + "");
 		scr3.setText(hs3 + "");
+    }
+	
+	@Override
+    public boolean onTouchEvent(MotionEvent e) {
+    	switch (e.getAction()) {
+        	case MotionEvent.ACTION_DOWN:
+        		Intent intent = new Intent(this, MainActivity.class);
+				this.startActivity(intent);
+        		break;
+    	}  	
+    	
+    	return true;
     }
 }
