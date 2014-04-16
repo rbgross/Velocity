@@ -7,10 +7,12 @@ import android.graphics.Typeface;
 import android.opengl.GLSurfaceView;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -30,21 +32,24 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // Create a GLES20InteractiveSurfaceView instance and set it as the ContentView for this Activity
         this.mView = new GLES20InteractiveSurfaceView(this);
-        setContentView(this.mView);
         
-        LinearLayout mLayout = new LinearLayout(this);
+        RelativeLayout rl = new RelativeLayout(this);
+        rl.addView(this.mView);        
         score = new TextView(this);
-        mLayout.addView(score);
         score.setText("Score: "+mscore);
         score.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
         // Set the font
         Typeface font = Typeface.createFromAsset(getAssets(), "xirod.ttf");
         score.setTypeface(font);
         score.setTextColor(Color.rgb(64, 192, 255));
-        mLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-        this.addContentView(mLayout, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ALIGN_TOP);
+        score.setLayoutParams(lp);
+		rl.addView(score);
+        
+        setContentView(rl);
     }
 
     @Override
