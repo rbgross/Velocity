@@ -51,7 +51,7 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         this.mp = MediaPlayer.create(context, R.raw.nights);
         this.mp.setLooping(true);
         
-        Scene.pause();        
+        Scene.pause();
     }
 
     @Override
@@ -60,8 +60,10 @@ public class GLES20InteractiveSurfaceView extends GLSurfaceView implements Senso
         	case MotionEvent.ACTION_DOWN:
         		if (Scene.isGameOver()) {
         			Scene.resetGame();
-        			this.mp.pause();
-        			this.mp.seekTo(0);
+        			if(this.mp.isPlaying()) {
+	        			this.mp.pause();
+	        			this.mp.seekTo(0);
+        			}
         			sp.play(endSound, 1, 1, 0, 0, 1);
         		} else if (Scene.isGameStart()) {
         			this.mGravity = null;
